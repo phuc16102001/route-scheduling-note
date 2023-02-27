@@ -1,0 +1,20 @@
+.menuPage {
+  background-color: #fff;
+  padding: 10px;
+  border-radius: 10px;
+  box-shadow: 1px 1px #888888;
+}
+
+.menuBtnGroup {
+  justify-content: space-around;
+  display: flex;
+}
+
+.menuHeader {
+  text-align: center;
+}
+
+.menuBtn {
+  width: 40%;
+  margin-top: 5px;
+}

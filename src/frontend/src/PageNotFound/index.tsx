@@ -7,8 +7,13 @@ const PageNotFound = () => {
     <Result
       status="404"
       title="404"
+      style={{ height: "90vh" }}
       subTitle="Sorry, the page you visited does not exist."
-      extra={<Button type="primary" href="/">Back Home</Button>}
+      extra={
+        <Button type="primary" href="/">
+          Back Home
+        </Button>
+      }
     />
   );
 };

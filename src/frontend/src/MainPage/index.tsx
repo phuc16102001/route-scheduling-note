@@ -1,23 +1,28 @@
-import { Row } from "antd";
-import { Col } from "antd/es/grid";
-import { LatLngExpression } from "leaflet";
-import { MapContainer, Marker, Popup, TileLayer } from "react-leaflet";
-import { Route, Routes } from "react-router-dom";
+import { BrowserRouter, Route, Routes } from "react-router-dom";
+import CustomMap from "../CustomMap";
 import ListPlaces from "../ListPlaces";
 import ListSchedules from "../ListSchedules";
-
-const position: LatLngExpression = [51.505, -0.09];
+import MenuPage from "../MenuPage";
+import PageNotFound from "../PageNotFound";
+import "./index.css";
 
 const MainPage = () => {
   return (
-    <MapContainer
-      style={{ height: "100vh" }}
-      center={position}
-      zoom={13}
-      scrollWheelZoom={false}
-    >
-      <TileLayer url="https://tile.openstreetmap.org/{z}/{x}/{y}.png" />
-    </MapContainer>
+    <BrowserRouter>
+      <div className="floatPanel">
+        <Routes>
+          <Route path="/" element={<MenuPage />}></Route>
+          <Route path="/schedules" element={<ListSchedules />}></Route>
+          <Route path="/places" element={<ListPlaces />}></Route>
+        </Routes>
+      </div>
+      <Routes>
+        <Route path="/" element={<CustomMap></CustomMap>}></Route>
+        <Route path="/schedules" element={<CustomMap></CustomMap>}></Route>
+        <Route path="/places" element={<CustomMap></CustomMap>}></Route>
+        <Route path="*" element={<PageNotFound />}></Route>
+      </Routes>
+    </BrowserRouter>
   );
 };
 
