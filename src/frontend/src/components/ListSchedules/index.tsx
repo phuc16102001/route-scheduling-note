@@ -2,7 +2,7 @@ import { Button, Divider, List, Skeleton } from "antd";
 import { useState } from "react";
 import InfiniteScroll from "react-infinite-scroll-component";
 import { useNavigate } from "react-router-dom";
-import ListHeader from "../ListHeader";
+import ListHeader from "components/ListHeader";
 
 interface Schedule {
   name: string;

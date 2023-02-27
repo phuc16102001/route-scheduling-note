@@ -29,4 +29,9 @@ public class PlaceController {
         return placeRepository.findById(id)
                 .orElseThrow(() -> new PlaceNotFoundException(id));
     }
+
+    @DeleteMapping("/places/{id}")
+    void deletePlace(@PathVariable Integer id) {
+        placeRepository.deleteById(id);
+    }
 }

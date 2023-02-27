@@ -1,7 +1,8 @@
 import { Button, Divider, List, Skeleton } from "antd";
 import React, { useState, useEffect } from "react";
 import InfiniteScroll from "react-infinite-scroll-component";
-import ListHeader from "../ListHeader";
+import api from "utils/axios";
+import ListHeader from "components/ListHeader";
 
 interface Schedule {
   name: string;
@@ -15,16 +16,17 @@ const ListPlaces = () => {
 
   const loadMoreData = () => {
     setData([
-      ...data,
-      {
-        name: "Day 3",
-        total_distance: 100,
-        duration: 200,
-      },
     ]);
   };
 
-  const fetchInit = () => {};
+  const fetchInit = async () => {
+    try {
+      const response = await api.get('places')
+      const { data } = response
+    } catch (e) {
+      console.log(e)
+    }
+  };
 
   useEffect(() => {
     fetchInit();

@@ -2,7 +2,6 @@ import React from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCircleLeft } from "@fortawesome/free-regular-svg-icons";
 import { useNavigate } from "react-router-dom";
-import Title from "antd/es/typography/Title";
 
 import "./index.css";
 

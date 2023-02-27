@@ -1,9 +1,9 @@
 import { BrowserRouter, Route, Routes } from "react-router-dom";
-import CustomMap from "../CustomMap";
-import ListPlaces from "../ListPlaces";
-import ListSchedules from "../ListSchedules";
-import MenuPage from "../MenuPage";
-import PageNotFound from "../PageNotFound";
+import CustomMap from "components/CustomMap";
+import ListPlaces from "components/ListPlaces";
+import ListSchedules from "components/ListSchedules";
+import MenuPage from "pages/MenuPage";
+import PageNotFound from "pages/PageNotFound";
 import "./index.css";
 
 const MainPage = () => {
