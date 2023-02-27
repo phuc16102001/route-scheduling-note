@@ -1,0 +1,13 @@
+.placeInfoSection {
+  margin-top: 10px;
+}
+
+.btnAddScreen {
+  width: 30%;
+}
+
+.btnAddGroup {
+  margin-top: 10px;
+  display: flex;
+  justify-content: space-evenly;
+}

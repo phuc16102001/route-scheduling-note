@@ -7,8 +7,8 @@ const MenuPage = () => {
   const navigate = useNavigate();
 
   return (
-    <div className="menuPage">
-      <h1 className="menuHeader">Menu</h1>
+    <div className="floatingPanel">
+      <h2 className="menuHeader">Menu</h2>
       <div className="menuBtnGroup">
         <Button
           onClick={() => navigate("/places")}

@@ -10,9 +10,9 @@ interface Schedule {
   duration: number;
 }
 const ListSchedules = () => {
-
   const [data, setData] = useState<Schedule[]>([]);
   const numberOfData = 0;
+  const navigate = useNavigate();
 
   const loadMoreData = () => {
     setData([
@@ -28,14 +28,11 @@ const ListSchedules = () => {
   return (
     <div
       id="scrollableDiv"
+      className="floatingPanel"
       style={{
         height: 400,
         overflow: "auto",
         padding: "0 16px",
-        boxShadow: "2px 2px #888888",
-        backgroundColor: "#fff",
-        border: "1px solid rgba(140, 140, 140, 0.35)",
-        borderRadius: "10px",
       }}
     >
       <InfiniteScroll
@@ -48,7 +45,13 @@ const ListSchedules = () => {
       >
         <List
           dataSource={data}
-          header={<ListHeader headerText="List schedules" />}
+          header={
+            <ListHeader
+              backFunction={() => navigate("/")}
+              addFunction={() => {}}
+              headerText="List schedules"
+            />
+          }
           renderItem={(schedule) => (
             <List.Item>
               <div>

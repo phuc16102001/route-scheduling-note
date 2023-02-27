@@ -2,3 +2,11 @@
   max-height: 90vh;
   overflow: hidden;
 }
+
+.floatingPanel {
+  border: 1px solid rgba(140, 140, 140, 0.35);
+  background-color: #fff;
+  border-radius: 10px;
+  padding: 20px;
+  box-shadow: 1px 1px #888888;
+}

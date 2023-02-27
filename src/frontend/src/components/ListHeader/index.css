@@ -1,13 +1,14 @@
 .listHeaderContainer {
   display: flex;
   align-items: center;
+  justify-content: space-between;
 }
 
-.backIcon {
+.icon {
   font-size: 16px;
 }
 
-.backIcon:hover {
+.icon:hover {
   cursor: pointer;
 }
 

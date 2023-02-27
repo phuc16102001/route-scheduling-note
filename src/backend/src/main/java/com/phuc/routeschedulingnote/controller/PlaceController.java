@@ -3,7 +3,9 @@ package com.phuc.routeschedulingnote.controller;
 import com.phuc.routeschedulingnote.exception.PlaceNotFoundException;
 import com.phuc.routeschedulingnote.model.Place;
 import com.phuc.routeschedulingnote.repository.PlaceRepository;
+import com.phuc.routeschedulingnote.service.PlaceService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -12,26 +14,25 @@ import java.util.List;
 public class PlaceController {
 
     @Autowired
-    private PlaceRepository placeRepository;
+    private PlaceService placeService;
 
     @PostMapping("/places")
-    public Place newPlace(@RequestBody Place place) {
-        return placeRepository.save(place);
+    public ResponseEntity<Place> newPlace(@RequestBody Place place) {
+        return placeService.newPlace(place);
     }
 
     @GetMapping("/places")
-    List<Place> allPlace() {
-        return placeRepository.findAll();
+    ResponseEntity<List<Place>> allPlace() {
+        return placeService.allPlace();
     }
 
     @GetMapping("/places/{id}")
-    Place onePlace(@PathVariable Integer id) {
-        return placeRepository.findById(id)
-                .orElseThrow(() -> new PlaceNotFoundException(id));
+    ResponseEntity<Place> onePlace(@PathVariable Integer id) {
+        return placeService.onePlace(id);
     }
 
     @DeleteMapping("/places/{id}")
     void deletePlace(@PathVariable Integer id) {
-        placeRepository.deleteById(id);
+        placeService.deleteById(id);
     }
 }
