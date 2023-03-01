@@ -15,6 +15,7 @@ public class Place {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
     private String name;
-    private GeoCoordinates coordinates;
+    private String address;
+    private Coordinates coordinates;
 
 }

@@ -7,7 +7,7 @@ import lombok.Setter;
 @Getter
 @Setter
 @Embeddable
-public class GeoCoordinates {
+public class Coordinates {
     private double lat;
     private double lng;
 }

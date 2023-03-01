@@ -1,9 +1,9 @@
 package com.phuc.routeschedulingnote.service;
 
-import com.phuc.routeschedulingnote.model.GeoCoordinates;
+import com.phuc.routeschedulingnote.model.Coordinates;
 
 public interface MapService {
 
-    GeoCoordinates searchCoordinate(String searchText);
+    Coordinates searchCoordinate(String searchText);
 
 }
