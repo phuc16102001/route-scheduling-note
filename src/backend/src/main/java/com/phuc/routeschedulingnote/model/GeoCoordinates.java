@@ -1,7 +1,6 @@
 package com.phuc.routeschedulingnote.model;
 
 import jakarta.persistence.Embeddable;
-import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
 
