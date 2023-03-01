@@ -4,7 +4,6 @@ import com.phuc.routeschedulingnote.exception.PlaceNotFoundException;
 import com.phuc.routeschedulingnote.model.Place;
 import com.phuc.routeschedulingnote.repository.PlaceRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -16,20 +15,19 @@ public class PlaceServiceImpl implements PlaceService{
     PlaceRepository placeRepository;
 
     @Override
-    public ResponseEntity<Place> newPlace(Place place) {
-        return ResponseEntity.ok(placeRepository.save(place));
+    public Place newPlace(Place place) {
+        return placeRepository.save(place);
     }
 
     @Override
-    public ResponseEntity<List<Place>> allPlace() {
-        return ResponseEntity.ok(placeRepository.findAll());
+    public List<Place> allPlace() {
+        return placeRepository.findAll();
     }
 
     @Override
-    public ResponseEntity<Place> onePlace(Integer id) {
-        Place place = placeRepository.findById(id)
+    public Place onePlace(Integer id) {
+        return placeRepository.findById(id)
                 .orElseThrow(() -> new PlaceNotFoundException(id));
-        return ResponseEntity.ok(place);
     }
 
     @Override
