@@ -1,19 +1,22 @@
-import { Button, Divider, List, Modal, Skeleton } from "antd";
-import React, { useState, useEffect } from "react";
+import { Divider, List, message, Skeleton } from "antd";
+import { useState, useEffect } from "react";
 import InfiniteScroll from "react-infinite-scroll-component";
-import api from "utils/axios";
 import ListHeader from "components/ListHeader";
 import { useNavigate } from "react-router-dom";
+import placeService from "services/place";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faTrash } from "@fortawesome/free-solid-svg-icons";
+import { LatLng } from "leaflet";
+import "./index.css";
 
-interface Schedule {
-  name: string;
-  total_distance: number;
-  duration: number;
+interface ListPlaceInterface {
+  setSingleMarker: (marker: LatLng, draggable: boolean) => void;
 }
 
-const ListPlaces = () => {
-  const [data, setData] = useState<Schedule[]>([]);
-  const numberOfData = 0;
+const ListPlaces = (props: ListPlaceInterface) => {
+  const setSingleMarker = props.setSingleMarker;
+  const [data, setData] = useState<Place[]>([]);
+  const [numberOfData, setNumberOfData] = useState<number>(0);
   const navigate = useNavigate();
 
   const loadMoreData = () => {
@@ -22,10 +25,28 @@ const ListPlaces = () => {
 
   const fetchInit = async () => {
     try {
-      const response = await api.get("places");
+      const response = await placeService.getPlaces();
       const { data } = response;
+      setData(data);
+      setNumberOfData(data.length);
     } catch (e) {
       console.log(e);
+    }
+  };
+
+  const onClickPlace = async (place: Place) => {
+    const coordinates = place.coordinates;
+    setSingleMarker(new LatLng(coordinates.lat, coordinates.lng), false);
+  };
+
+  const onDeletePlace = async (place: Place) => {
+    try {
+      await placeService.deletePlace(place);
+      message.success("Your place has been removed!");
+      fetchInit();
+    } catch (e) {
+      console.log(e);
+      message.error("There was some problem!");
     }
   };
 
@@ -46,7 +67,7 @@ const ListPlaces = () => {
         <InfiniteScroll
           dataLength={data.length}
           next={loadMoreData}
-          hasMore={data.length < 15}
+          hasMore={data.length < numberOfData}
           endMessage={<Divider>End</Divider>}
           loader={<Skeleton paragraph={{ rows: 1 }} active />}
           scrollableTarget="scrollableDiv"
@@ -60,13 +81,17 @@ const ListPlaces = () => {
                 headerText="List places"
               />
             }
-            renderItem={(schedule) => (
+            renderItem={(place: Place) => (
               <List.Item>
-                <div>
-                  {schedule.name} -{schedule.total_distance} -{" "}
-                  {schedule.duration}
+                <div onClick={() => onClickPlace(place)} className="placeItem">
+                  <div>Name: {place.name}</div>
+                  <div>Address: {place.address}</div>
                 </div>
-                <Button danger>Delete</Button>
+                <FontAwesomeIcon
+                  icon={faTrash}
+                  onClick={() => onDeletePlace(place)}
+                  className="deleteIcon"
+                />
               </List.Item>
             )}
           ></List>

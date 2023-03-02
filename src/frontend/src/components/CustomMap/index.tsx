@@ -3,7 +3,7 @@ import {
   latLngBounds,
   LatLngExpression,
   LeafletEventHandlerFnMap,
-  Marker as LeafletMarker
+  Marker as LeafletMarker,
 } from "leaflet";
 import { useEffect, useMemo, useRef } from "react";
 import { Marker, TileLayer, useMap } from "react-leaflet";
@@ -13,11 +13,13 @@ interface CustomeMapInterface {
   listMarker?: LatLng[];
   listSegment?: LatLngExpression[];
   setSingleMarker: (marker: LatLng) => void;
+  draggable: boolean;
 }
 
 const CustomMap = (props: CustomeMapInterface) => {
   const listMarker = props.listMarker;
   const setSingleMarker = props.setSingleMarker;
+  const draggable = props.draggable;
   const draggableMarker = useRef<LeafletMarker>(null);
   const map = useMap();
 
@@ -46,7 +48,7 @@ const CustomMap = (props: CustomeMapInterface) => {
         listMarker.length === 1 ? (
           <Marker
             eventHandlers={markerHandler}
-            draggable={true}
+            draggable={draggable}
             ref={draggableMarker}
             position={listMarker[0]}
           />

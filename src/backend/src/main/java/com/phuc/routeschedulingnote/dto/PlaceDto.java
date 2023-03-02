@@ -1,7 +1,11 @@
 package com.phuc.routeschedulingnote.dto.outbound;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import lombok.Data;
 
+@Data
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class PlaceDto {
 
     @JsonProperty("id")

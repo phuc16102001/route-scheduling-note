@@ -13,9 +13,11 @@ import { MapContainer } from "react-leaflet";
 const MainPage = () => {
   const [listMarker, setListMarker] = useState<LatLng[]>();
   const [listSegment, setListSegment] = useState<LatLngExpression[]>([]);
+  const [draggable, setDraggable] = useState<boolean>(true);
 
-  const setSingleMarker = (marker: LatLng) => {
+  const setSingleMarker = (marker: LatLng, draggable: boolean = true) => {
     setListMarker([marker]);
+    setDraggable(draggable);
   };
 
   return (
@@ -25,7 +27,10 @@ const MainPage = () => {
           <Routes>
             <Route path="/" element={<MenuPage />} />
             <Route path="/schedules" element={<ListSchedules />} />
-            <Route path="/places" element={<ListPlaces />} />
+            <Route
+              path="/places"
+              element={<ListPlaces setSingleMarker={setSingleMarker} />}
+            />
             <Route path="/addSchedule" element={<AddSchedule />} />
             <Route
               path="/addPlace"
@@ -51,6 +56,7 @@ const MainPage = () => {
           setSingleMarker={setSingleMarker}
           listMarker={listMarker}
           listSegment={listSegment}
+          draggable={draggable}
         />
       </MapContainer>
     </>

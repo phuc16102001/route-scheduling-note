@@ -9,7 +9,7 @@ import java.util.List;
 
 @Data
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class GeoGeometryDto implements Serializable {
+public class OrsGeometryDto implements Serializable {
 
     @JsonProperty("coordinates")
     private List<Double> coordinates;

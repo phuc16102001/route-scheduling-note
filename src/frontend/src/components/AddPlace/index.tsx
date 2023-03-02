@@ -1,8 +1,10 @@
 import { Button, Descriptions, Input, message } from "antd";
 import Search from "antd/es/input/Search";
 import { latLng, LatLng } from "leaflet";
+import { ChangeEvent, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import api from "utils/axios";
+import mapService from "services/map";
+import placeService from "services/place";
 import "./index.css";
 
 interface AddPlaceProps {
@@ -12,32 +14,66 @@ interface AddPlaceProps {
 
 const AddPlace = (props: AddPlaceProps) => {
   const navigate = useNavigate();
+  const [name, setName] = useState<string>("");
+  const [address, setAddress] = useState<string>("");
+  const [searching, setSearching] = useState<boolean>(false);
   const setSingleMarker = props.setSingleMarker;
   const listMarker = props.listMarker;
 
   const searchPlace = async (value: string) => {
     try {
-      const response = await api.get("/search", {
-        params: {
-          searchText: value,
-        },
-      });
+      setSearching(true);
+      const response = await mapService.searchGeoText(value);
       const { data } = response;
       setSingleMarker(latLng(data.lat, data.lng));
-      await message.success(
-        "We have found your place! You can drag to be more precise"
-      );
+      message.success("We have found your place!");
     } catch (e) {
       console.log(e);
       message.error("Sorry we cannot find it.");
+    } finally {
+      setSearching(false);
     }
   };
 
   const addPlace = async () => {
     try {
+      if (!listMarker) {
+        message.info("Please search for your place first.");
+        return;
+      }
+
+      if (name.length < 1) {
+        message.info("Please give your place a beautiful name.");
+        return;
+      }
+
+      const place: Place = {
+        name: name,
+        address: address,
+        coordinates: {
+          lat: listMarker[0].lat,
+          lng: listMarker[0].lng,
+        },
+      };
+      await placeService.addPlace(place);
+      message.success("Your place is added.");
+      navigate("/places")
     } catch (e) {
       console.log(e);
+      message.error("There was some error occured.");
     }
+  };
+
+  const onNameChange = (
+    event: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+  ) => {
+    setName(event.target.value);
+  };
+
+  const onAddressChange = (
+    event: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+  ) => {
+    setAddress(event.target.value);
   };
 
   return (
@@ -47,7 +83,10 @@ const AddPlace = (props: AddPlaceProps) => {
         placeholder="Enter name/address"
         allowClear
         enterButton
+        value={address}
+        onChange={onAddressChange}
         size="middle"
+        loading={searching}
         onSearch={searchPlace}
       />
       <Descriptions
@@ -64,12 +103,21 @@ const AddPlace = (props: AddPlaceProps) => {
           {listMarker ? listMarker[0].lng.toFixed(3) : "Unselected"}
         </Descriptions.Item>
       </Descriptions>
-      <Input className="inputMemoName" placeholder="Memo name" />
+      <Input
+        value={name}
+        onChange={onNameChange}
+        className="inputMemoName"
+        placeholder="Memo name"
+      />
       <div className="btnAddGroup">
         <Button onClick={() => navigate("/places")} className="btnAddScreen">
           Cancel
         </Button>
-        <Button onClick={addPlace} className="btnAddScreen" type="primary">
+        <Button
+          onClick={() => addPlace()}
+          className="btnAddScreen"
+          type="primary"
+        >
           Add
         </Button>
       </div>
