@@ -31,8 +31,8 @@ public class MapServiceImpl implements MapService {
         List<Double> coordinates = searchObj.getFeatures().get(0).getGeometry().getCoordinates();
 
         Coordinates response = new Coordinates();
-        response.setLat(coordinates.get(0));
-        response.setLng(coordinates.get(1));
+        response.setLng(coordinates.get(0));
+        response.setLat(coordinates.get(1));
         return response;
     }
 }
