@@ -1,6 +1,8 @@
 package com.phuc.routeschedulingnote.service;
 
-import com.phuc.routeschedulingnote.dto.inbound.GeoQueryDto;
+import com.phuc.routeschedulingnote.dto.OrsFeatureDto;
+import com.phuc.routeschedulingnote.dto.OrsGeocodeDto;
+import com.phuc.routeschedulingnote.exception.GeocodeNotFoundException;
 import com.phuc.routeschedulingnote.model.Coordinates;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -27,8 +29,13 @@ public class MapServiceImpl implements MapService {
         variables.put("orsApiKey", orsApiKey);
         variables.put("searchText", searchText);
 
-        GeoQueryDto searchObj = restTemplate.getForObject(uri, GeoQueryDto.class, variables);
-        List<Double> coordinates = searchObj.getFeatures().get(0).getGeometry().getCoordinates();
+        OrsGeocodeDto searchObj = restTemplate.getForObject(uri, OrsGeocodeDto.class, variables);
+        assert searchObj != null;
+        List<OrsFeatureDto> features = searchObj.getFeatures();
+        if (features.size()==0) {
+            throw new GeocodeNotFoundException(searchText);
+        }
+        List<Double> coordinates = features.get(0).getGeometry().getCoordinates();
 
         Coordinates response = new Coordinates();
         response.setLng(coordinates.get(0));

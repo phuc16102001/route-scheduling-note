@@ -1,4 +1,4 @@
-package com.phuc.routeschedulingnote.dto.outbound;
+package com.phuc.routeschedulingnote.dto;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Data;

@@ -1,4 +1,4 @@
-package com.phuc.routeschedulingnote.dto.inbound;
+package com.phuc.routeschedulingnote.dto;
 
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;

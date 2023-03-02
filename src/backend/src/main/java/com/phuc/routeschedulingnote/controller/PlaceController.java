@@ -1,6 +1,6 @@
 package com.phuc.routeschedulingnote.controller;
 
-import com.phuc.routeschedulingnote.dto.outbound.PlaceDto;
+import com.phuc.routeschedulingnote.dto.PlaceDto;
 import com.phuc.routeschedulingnote.model.Place;
 import com.phuc.routeschedulingnote.service.PlaceService;
 import org.modelmapper.ModelMapper;
@@ -20,7 +20,8 @@ public class PlaceController {
     private ModelMapper modelMapper;
 
     @PostMapping("/places")
-    public PlaceDto newPlace(@RequestBody Place place) {
+    public PlaceDto newPlace(@RequestBody PlaceDto placeDto) {
+        Place place = modelMapper.map(placeDto, Place.class);
         Place createdPlace = placeService.newPlace(place);
         return modelMapper.map(createdPlace, PlaceDto.class);
     }

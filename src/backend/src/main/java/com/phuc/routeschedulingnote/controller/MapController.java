@@ -1,6 +1,6 @@
 package com.phuc.routeschedulingnote.controller;
 
-import com.phuc.routeschedulingnote.dto.outbound.CoordinatesDto;
+import com.phuc.routeschedulingnote.dto.CoordinatesDto;
 import com.phuc.routeschedulingnote.model.Coordinates;
 import com.phuc.routeschedulingnote.service.MapService;
 import org.modelmapper.ModelMapper;
