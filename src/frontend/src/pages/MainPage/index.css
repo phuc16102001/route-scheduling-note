@@ -1,5 +1,5 @@
 .floatPanel {
-  width: 20%;
+  min-width: 20%;
   padding: 10px;
   position: absolute;
   z-index: 1;

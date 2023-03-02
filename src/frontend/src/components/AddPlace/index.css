@@ -11,3 +11,7 @@
   display: flex;
   justify-content: space-evenly;
 }
+
+.inputMemoName {
+  margin: 10px 0px;
+}

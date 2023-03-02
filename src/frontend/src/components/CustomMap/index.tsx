@@ -1,21 +1,60 @@
-import { LatLngExpression } from "leaflet";
-import React from "react";
-import { MapContainer, TileLayer } from "react-leaflet";
+import {
+  LatLng,
+  latLngBounds,
+  LatLngExpression,
+  LeafletEventHandlerFnMap,
+  Marker as LeafletMarker
+} from "leaflet";
+import { useEffect, useMemo, useRef } from "react";
+import { Marker, TileLayer, useMap } from "react-leaflet";
 import "./index.css";
 
-const position: LatLngExpression = [51.505, -0.09];
+interface CustomeMapInterface {
+  listMarker?: LatLng[];
+  listSegment?: LatLngExpression[];
+  setSingleMarker: (marker: LatLng) => void;
+}
 
-const CustomMap = () => {
+const CustomMap = (props: CustomeMapInterface) => {
+  const listMarker = props.listMarker;
+  const setSingleMarker = props.setSingleMarker;
+  const draggableMarker = useRef<LeafletMarker>(null);
+  const map = useMap();
+
+  const markerHandler = useMemo(() => {
+    const handler: LeafletEventHandlerFnMap = {
+      dragend() {
+        const marker = draggableMarker.current;
+        if (marker != null) {
+          setSingleMarker(marker.getLatLng());
+        }
+      },
+    };
+    return handler;
+  }, []);
+
+  useEffect(() => {
+    if (listMarker) {
+      map.flyToBounds(latLngBounds(listMarker));
+    }
+  }, [listMarker, map]);
+
   return (
-    <MapContainer
-      className="mapContainer"
-      center={position}
-      zoom={13}
-      zoomControl={false}
-      scrollWheelZoom={true}
-    >
+    <>
       <TileLayer url="https://tile.openstreetmap.org/{z}/{x}/{y}.png" />
-    </MapContainer>
+      {listMarker ? (
+        listMarker.length === 1 ? (
+          <Marker
+            eventHandlers={markerHandler}
+            draggable={true}
+            ref={draggableMarker}
+            position={listMarker[0]}
+          />
+        ) : (
+          listMarker.map((element) => <Marker position={element} />)
+        )
+      ) : null}
+    </>
   );
 };
 
