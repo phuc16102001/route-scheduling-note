@@ -31,7 +31,6 @@ const ListSchedules = () => {
       className="floatingPanel"
       style={{
         height: 400,
-        overflow: "auto",
         padding: "0 16px",
       }}
     >
@@ -48,7 +47,7 @@ const ListSchedules = () => {
           header={
             <ListHeader
               backFunction={() => navigate("/")}
-              addFunction={() => {}}
+              addFunction={() => navigate("/addSchedule")}
               headerText="List schedules"
             />
           }

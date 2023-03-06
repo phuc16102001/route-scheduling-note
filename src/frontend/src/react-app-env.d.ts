@@ -15,3 +15,8 @@ interface Schedule {
   total_distance: number;
   duration: number;
 }
+
+interface PlaceNote {
+  place: Place;
+  note: string;
+}

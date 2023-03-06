@@ -8,7 +8,7 @@ import placeService from "services/place";
 import "./index.css";
 
 interface AddPlaceProps {
-  setSingleMarker: (marker: LatLng) => void;
+  setSingleMarkerCallback: (marker: LatLng) => void;
   listMarker?: LatLng[];
 }
 
@@ -17,7 +17,7 @@ const AddPlace = (props: AddPlaceProps) => {
   const [name, setName] = useState<string>("");
   const [address, setAddress] = useState<string>("");
   const [searching, setSearching] = useState<boolean>(false);
-  const setSingleMarker = props.setSingleMarker;
+  const setSingleMarker = props.setSingleMarkerCallback;
   const listMarker = props.listMarker;
 
   const searchPlace = async (value: string) => {

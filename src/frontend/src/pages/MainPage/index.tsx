@@ -15,10 +15,15 @@ const MainPage = () => {
   const [listSegment, setListSegment] = useState<LatLngExpression[]>([]);
   const [draggable, setDraggable] = useState<boolean>(true);
 
-  const setSingleMarker = (marker: LatLng, draggable: boolean = true) => {
+  const setSingleMarkerCallback = (marker: LatLng, draggable: boolean = true) => {
     setListMarker([marker]);
     setDraggable(draggable);
   };
+
+  const setListMarkerCallback = (markers: LatLng[]) => {
+    setListMarker(markers);
+    setDraggable(false);
+  }
 
   return (
     <>
@@ -29,15 +34,15 @@ const MainPage = () => {
             <Route path="/schedules" element={<ListSchedules />} />
             <Route
               path="/places"
-              element={<ListPlaces setSingleMarker={setSingleMarker} />}
+              element={<ListPlaces setSingleMarker={setSingleMarkerCallback} />}
             />
-            <Route path="/addSchedule" element={<AddSchedule />} />
+            <Route path="/addSchedule" element={<AddSchedule setListMarkerCallback={setListMarkerCallback}/>} />
             <Route
               path="/addPlace"
               element={
                 <AddPlace
                   listMarker={listMarker}
-                  setSingleMarker={setSingleMarker}
+                  setSingleMarkerCallback={setSingleMarkerCallback}
                 />
               }
             />
@@ -53,7 +58,7 @@ const MainPage = () => {
         scrollWheelZoom={true}
       >
         <CustomMap
-          setSingleMarker={setSingleMarker}
+          setSingleMarker={setSingleMarkerCallback}
           listMarker={listMarker}
           listSegment={listSegment}
           draggable={draggable}

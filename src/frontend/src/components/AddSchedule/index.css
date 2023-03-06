@@ -1,0 +1,27 @@
+.btnAddScreen {
+  width: 30%;
+}
+
+.btnAddGroup {
+  margin-top: 10px;
+  display: flex;
+  justify-content: space-evenly;
+}
+
+.inputMemoName {
+  margin: 10px 0px;
+}
+
+.deleteIcon:hover {
+  cursor: pointer;
+}
+
+.deleteIcon {
+  color: red;
+  margin-left: 5px;
+  padding: 5px;
+}
+
+.btnAddPlace:hover {
+  cursor: pointer;
+}
