@@ -33,10 +33,10 @@ const CustomMap = (props: CustomeMapInterface) => {
       },
     };
     return handler;
-  }, []);
+  }, [setSingleMarker]);
 
   useEffect(() => {
-    if (listMarker) {
+    if (listMarker && listMarker.length>0) {
       map.flyToBounds(latLngBounds(listMarker));
     }
   }, [listMarker, map]);

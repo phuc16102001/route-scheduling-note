@@ -1,5 +1,6 @@
 .btnAddScreen {
-  width: 30%;
+  min-width: 30%;
+  width: auto;
 }
 
 .btnAddGroup {
@@ -13,6 +14,10 @@
 }
 
 .deleteIcon:hover {
+  cursor: pointer;
+}
+
+.editIcon:hover {
   cursor: pointer;
 }
 

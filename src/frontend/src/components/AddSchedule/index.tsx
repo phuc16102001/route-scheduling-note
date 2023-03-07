@@ -2,8 +2,9 @@ import { faEdit } from "@fortawesome/free-regular-svg-icons";
 import { faPlus, faTrash } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { Button, Divider, List, Modal, Skeleton } from "antd";
+import TextArea from "antd/es/input/TextArea";
 import { LatLng } from "leaflet";
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import InfiniteScroll from "react-infinite-scroll-component";
 import { useNavigate } from "react-router-dom";
 import placeService from "services/place";
@@ -18,12 +19,27 @@ const AddSchedule = (props: AddScheduleProps) => {
   const maxPlaces = 5;
   const setListMarkerCallback = props.setListMarkerCallback;
 
-  const [addModelOpen, setAddModelOpen] = useState<boolean>(false);
+  const [note, setNote] = useState<string>("");
+  const [editingPlace, setEditingPlace] = useState<PlaceNote>();
+  const [addPlaceOpen, setAddPlaceOpen] = useState<boolean>(false);
+  const [addNoteOpen, setAddNoteOpen] = useState<boolean>(false);
   const [listPlace, setListPlace] = useState<Place[]>([]);
   const [numberOfPlace, setNumberOfPlace] = useState<number>(0);
   const [listSelectedPlaceNote, setListSelectedPlaceNote] = useState<
     PlaceNote[]
   >([]);
+
+  const resetListMarker = (listMarker: PlaceNote[]) => {
+    const markers: LatLng[] = listMarker.map(
+      (element) =>
+        new LatLng(
+          element.place.coordinates.lat,
+          element.place.coordinates.lng
+        )
+    )
+    console.log(markers)
+    setListMarkerCallback(markers);
+  };
 
   const onAddPlace = async (place: Place) => {
     const newPlaceNote: PlaceNote = {
@@ -32,16 +48,8 @@ const AddSchedule = (props: AddScheduleProps) => {
     };
     const newList = [...listSelectedPlaceNote, newPlaceNote];
     setListSelectedPlaceNote(newList);
-    setListMarkerCallback(
-      newList.map(
-        (element) =>
-          new LatLng(
-            element.place.coordinates.lat,
-            element.place.coordinates.lng
-          )
-      )
-    );
-    setAddModelOpen(false);
+    resetListMarker(newList);
+    setAddPlaceOpen(false);
   };
 
   const fetchInit = async () => {
@@ -56,21 +64,70 @@ const AddSchedule = (props: AddScheduleProps) => {
   };
 
   const onDeletePlace = async (place: PlaceNote) => {
+    const newList = listSelectedPlaceNote.filter((item) => item !== place);
+    setListSelectedPlaceNote(newList);
+    resetListMarker(newList);
+  };
+
+  const onAddNote = async () => {
     setListSelectedPlaceNote(
-      listSelectedPlaceNote.filter((item) => item !== place)
+      listSelectedPlaceNote.map((element) => {
+        if (element === editingPlace) {
+          const newPlaceNote: PlaceNote = {
+            place: editingPlace.place,
+            note: note,
+          };
+          return newPlaceNote;
+        } else {
+          return element;
+        }
+      })
     );
+
+    setAddNoteOpen(false);
+    setNote("");
+  };
+
+  const onCancelNote = async () => {
+    setAddNoteOpen(false);
+    setNote("");
+  };
+
+  const onEditNote = async (placeNote: PlaceNote) => {
+    setNote(placeNote.note);
+    setEditingPlace(placeNote);
+    setAddNoteOpen(true);
   };
 
   useEffect(() => {
     fetchInit();
   }, []);
 
+  const onCancel = async () => {
+    navigate("/schedules");
+    resetListMarker([]);
+  };
+
   return (
     <div className="floatingPanel" style={{ maxHeight: "400px" }}>
       <Modal
+        title="Add note"
+        open={addNoteOpen}
+        onCancel={onCancelNote}
+        onOk={onAddNote}
+      >
+        <TextArea
+          value={note}
+          onChange={(e) => setNote(e.target.value)}
+          size="large"
+          placeholder="Note"
+        />
+      </Modal>
+
+      <Modal
         title="Add place"
-        open={addModelOpen}
-        onCancel={() => setAddModelOpen(false)}
+        open={addPlaceOpen}
+        onCancel={() => setAddPlaceOpen(false)}
         footer={null}
       >
         <InfiniteScroll
@@ -105,7 +162,12 @@ const AddSchedule = (props: AddScheduleProps) => {
               <div>Name: {placeNote.place.name}</div>
               <div>Address: {placeNote.place.address}</div>
               <div>
-                Note: {placeNote.note} <FontAwesomeIcon icon={faEdit} />
+                Note: {placeNote.note}{" "}
+                <FontAwesomeIcon
+                  className="editIcon"
+                  onClick={() => onEditNote(placeNote)}
+                  icon={faEdit}
+                />
               </div>
             </div>
             <FontAwesomeIcon
@@ -120,7 +182,7 @@ const AddSchedule = (props: AddScheduleProps) => {
       {listSelectedPlaceNote.length < maxPlaces ? (
         <div
           className="btnAddPlace"
-          onClick={() => setAddModelOpen(true)}
+          onClick={() => setAddPlaceOpen(true)}
           style={{ textAlign: "center" }}
         >
           <FontAwesomeIcon icon={faPlus} /> Add place
@@ -129,11 +191,11 @@ const AddSchedule = (props: AddScheduleProps) => {
         <div style={{ textAlign: "center" }}>You can add maximum 5 places</div>
       )}
       <div className="btnAddGroup">
-        <Button onClick={() => navigate("/schedules")} className="btnAddScreen">
+        <Button onClick={onCancel} className="btnAddScreen">
           Cancel
         </Button>
         <Button className="btnAddScreen" type="primary">
-          Add
+          Schedule & Add
         </Button>
       </div>
     </div>
