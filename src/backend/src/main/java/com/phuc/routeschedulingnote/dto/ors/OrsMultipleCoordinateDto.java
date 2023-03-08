@@ -1,4 +1,4 @@
-package com.phuc.routeschedulingnote.dto;
+package com.phuc.routeschedulingnote.dto.ors;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -9,9 +9,9 @@ import java.util.List;
 
 @Data
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class OrsGeometryDto implements Serializable {
+public class OrsMultipleCoordinateDto implements Serializable {
 
     @JsonProperty("coordinates")
-    private List<Double> coordinates;
+    private List<List<Double>> coordinates;
 
 }

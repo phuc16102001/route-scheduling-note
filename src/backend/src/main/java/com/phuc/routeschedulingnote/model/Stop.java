@@ -1,14 +1,13 @@
 package com.phuc.routeschedulingnote.model;
 
 import jakarta.persistence.*;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.Data;
 
 @Entity
-@Getter
-@Setter
-@Table(name="schedule_stop")
-public class ScheduleStop {
+@Data
+@Table(name="stop")
+@IdClass(StopKey.class)
+public class Stop {
 
     @Id
     @ManyToOne(fetch = FetchType.EAGER)
@@ -17,7 +16,6 @@ public class ScheduleStop {
 
     @Id
     private Integer stopOrder;
-
     private Coordinates coordinates;
 
 }

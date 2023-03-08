@@ -1,11 +1,9 @@
 package com.phuc.routeschedulingnote.model;
 
 import jakarta.persistence.Embeddable;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.Data;
 
-@Getter
-@Setter
+@Data
 @Embeddable
 public class Coordinates {
     private double lat;
