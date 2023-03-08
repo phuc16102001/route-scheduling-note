@@ -1,13 +1,14 @@
 import { faEdit } from "@fortawesome/free-regular-svg-icons";
 import { faPlus, faTrash } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { Button, Divider, List, Modal, Skeleton } from "antd";
+import { Button, Divider, Input, List, message, Modal, Skeleton } from "antd";
 import TextArea from "antd/es/input/TextArea";
 import { LatLng } from "leaflet";
 import { useEffect, useState } from "react";
 import InfiniteScroll from "react-infinite-scroll-component";
 import { useNavigate } from "react-router-dom";
 import placeService from "services/place";
+import scheduleService from "services/schedule";
 import "./index.css";
 
 interface AddScheduleProps {
@@ -19,10 +20,15 @@ const AddSchedule = (props: AddScheduleProps) => {
   const maxPlaces = 5;
   const setListMarkerCallback = props.setListMarkerCallback;
 
+  const [scheduleName, setScheduleName] = useState<string>("");
   const [note, setNote] = useState<string>("");
   const [editingPlace, setEditingPlace] = useState<PlaceNote>();
+
+  const [confirmScheduleOpen, setConfirmScheduleOpen] =
+    useState<boolean>(false);
   const [addPlaceOpen, setAddPlaceOpen] = useState<boolean>(false);
   const [addNoteOpen, setAddNoteOpen] = useState<boolean>(false);
+
   const [listPlace, setListPlace] = useState<Place[]>([]);
   const [numberOfPlace, setNumberOfPlace] = useState<number>(0);
   const [listSelectedPlaceNote, setListSelectedPlaceNote] = useState<
@@ -32,12 +38,8 @@ const AddSchedule = (props: AddScheduleProps) => {
   const resetListMarker = (listMarker: PlaceNote[]) => {
     const markers: LatLng[] = listMarker.map(
       (element) =>
-        new LatLng(
-          element.place.coordinates.lat,
-          element.place.coordinates.lng
-        )
-    )
-    console.log(markers)
+        new LatLng(element.place.coordinates.lat, element.place.coordinates.lng)
+    );
     setListMarkerCallback(markers);
   };
 
@@ -108,6 +110,21 @@ const AddSchedule = (props: AddScheduleProps) => {
     resetListMarker([]);
   };
 
+  const onScheduleAdd = async () => {
+    try {
+      const schedule: Schedule = {
+        name: scheduleName,
+        placeNotes: listSelectedPlaceNote,
+      };
+      await scheduleService.addSchedule(schedule);
+      message.success("Add schedule successfully");
+      navigate("/schedules");
+    } catch (e) {
+      console.log(e)
+      message.error("Sorry, something was wrong!");
+    }
+  };
+
   return (
     <div className="floatingPanel" style={{ maxHeight: "400px" }}>
       <Modal
@@ -121,6 +138,19 @@ const AddSchedule = (props: AddScheduleProps) => {
           onChange={(e) => setNote(e.target.value)}
           size="large"
           placeholder="Note"
+        />
+      </Modal>
+
+      <Modal
+        title="Confirm add schedule"
+        open={confirmScheduleOpen}
+        onCancel={() => setConfirmScheduleOpen(false)}
+        onOk={onScheduleAdd}
+      >
+        <Input
+          value={scheduleName}
+          onChange={(e) => setScheduleName(e.target.value)}
+          placeholder="Schedule name"
         />
       </Modal>
 
@@ -194,7 +224,11 @@ const AddSchedule = (props: AddScheduleProps) => {
         <Button onClick={onCancel} className="btnAddScreen">
           Cancel
         </Button>
-        <Button className="btnAddScreen" type="primary">
+        <Button
+          onClick={() => setConfirmScheduleOpen(true)}
+          className="btnAddScreen"
+          type="primary"
+        >
           Schedule & Add
         </Button>
       </div>
