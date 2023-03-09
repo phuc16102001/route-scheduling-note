@@ -61,4 +61,9 @@ public class ScheduleServiceImpl implements ScheduleService {
 
         return inserted;
     }
+
+    @Override
+    public List<Schedule> getListSchedule() {
+        return scheduleRepository.findAll();
+    }
 }
