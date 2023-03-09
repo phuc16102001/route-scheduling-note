@@ -35,8 +35,14 @@ const ListPlaces = (props: ListPlaceInterface) => {
   };
 
   const onClickPlace = async (place: Place) => {
-    const coordinates = place.coordinates;
-    setSingleMarker(new LatLng(coordinates.lat, coordinates.lng), false);
+    try {
+      const response = await placeService.getPlace(place);
+      const fetchPlace: Place = response.data;
+      const coordinates = fetchPlace.coordinates;
+      setSingleMarker(new LatLng(coordinates!.lat, coordinates!.lng), false);
+    } catch (e) {
+      console.log(e)
+    }
   };
 
   const onDeletePlace = async (place: Place) => {

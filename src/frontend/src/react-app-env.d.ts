@@ -9,7 +9,7 @@ interface Place {
   id?: number;
   name: string;
   address: string;
-  coordinates: Coordinates;
+  coordinates?: Coordinates;
 }
 interface PlaceNote {
   place: Place;

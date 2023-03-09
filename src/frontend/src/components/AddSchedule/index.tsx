@@ -38,20 +38,28 @@ const AddSchedule = (props: AddScheduleProps) => {
   const resetListMarker = (listMarker: PlaceNote[]) => {
     const markers: LatLng[] = listMarker.map(
       (element) =>
-        new LatLng(element.place.coordinates.lat, element.place.coordinates.lng)
+        new LatLng(element.place.coordinates!.lat, element.place.coordinates!.lng)
     );
     setListMarkerCallback(markers);
   };
 
   const onAddPlace = async (place: Place) => {
-    const newPlaceNote: PlaceNote = {
-      place: place,
-      note: "",
-    };
-    const newList = [...listSelectedPlaceNote, newPlaceNote];
-    setListSelectedPlaceNote(newList);
-    resetListMarker(newList);
-    setAddPlaceOpen(false);
+    try {
+      const response = await placeService.getPlace(place);
+      const fetchedPlace: Place = response.data;
+
+      const newPlaceNote: PlaceNote = {
+        place: fetchedPlace,
+        note: "",
+      };
+      const newList = [...listSelectedPlaceNote, newPlaceNote];
+      setListSelectedPlaceNote(newList);
+      resetListMarker(newList);
+    } catch (e) {
+        console.log(e);
+    } finally {
+      setAddPlaceOpen(false);
+    }
   };
 
   const fetchInit = async () => {

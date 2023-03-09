@@ -8,6 +8,10 @@ const placeService = {
   async getPlaces() {
     return api.get("/places");
   },
+  
+  async getPlace(place: Place) {
+    return api.get(`/places/${place.id}`);
+  },
 
   async deletePlace(place: Place) {
     const { id } = place;
