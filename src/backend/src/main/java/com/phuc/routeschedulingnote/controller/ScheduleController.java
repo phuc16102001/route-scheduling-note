@@ -7,10 +7,7 @@ import com.phuc.routeschedulingnote.model.Schedule;
 import com.phuc.routeschedulingnote.service.ScheduleService;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -37,6 +34,13 @@ public class ScheduleController {
         return schedules.stream().map(
             element -> modelMapper.map(element, ScheduleListDto.class)
         ).collect(Collectors.toList());
+    }
+
+
+    @GetMapping("/schedules/{id}")
+    public ScheduleGetDto getOneSchedule(@PathVariable Integer id) {
+        Schedule schedules = scheduleService.getOneSchedule(id);
+        return modelMapper.map(schedules, ScheduleGetDto.class);
     }
 
 }

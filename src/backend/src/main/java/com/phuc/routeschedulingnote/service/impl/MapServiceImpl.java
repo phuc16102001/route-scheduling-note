@@ -68,8 +68,8 @@ public class MapServiceImpl implements MapService {
         return searchObj.getFeatures().get(0).getGeometry().getCoordinates().stream().map(
                 element -> {
                     Coordinates coordinate = new Coordinates();
-                    coordinate.setLat(element.get(0));
-                    coordinate.setLng(element.get(1));
+                    coordinate.setLat(element.get(1));
+                    coordinate.setLng(element.get(0));
                     return coordinate;
                 }
         ).collect(Collectors.toList());

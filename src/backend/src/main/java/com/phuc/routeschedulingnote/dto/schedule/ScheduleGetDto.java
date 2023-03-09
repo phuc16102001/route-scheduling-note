@@ -1,8 +1,8 @@
 package com.phuc.routeschedulingnote.dto.schedule;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.phuc.routeschedulingnote.dto.CoordinatesDto;
 import com.phuc.routeschedulingnote.dto.PlaceNoteDto;
+import com.phuc.routeschedulingnote.dto.StopDto;
 import lombok.Data;
 
 import java.time.Instant;
@@ -24,6 +24,6 @@ public class ScheduleGetDto {
     private List<PlaceNoteDto> placeNotes;
 
     @JsonProperty("stops")
-    private List<CoordinatesDto> stops;
+    private List<StopDto> stops;
 
 }

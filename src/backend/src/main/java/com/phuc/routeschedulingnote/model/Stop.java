@@ -10,7 +10,7 @@ import lombok.Data;
 public class Stop {
 
     @Id
-    @ManyToOne(fetch = FetchType.EAGER)
+    @ManyToOne
     @JoinColumn(name="schedule_id")
     private Schedule schedule;
 

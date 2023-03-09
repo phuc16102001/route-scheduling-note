@@ -1,5 +1,6 @@
 package com.phuc.routeschedulingnote.service.impl;
 
+import com.phuc.routeschedulingnote.exception.ScheduleNotFoundException;
 import com.phuc.routeschedulingnote.model.Coordinates;
 import com.phuc.routeschedulingnote.model.Schedule;
 import com.phuc.routeschedulingnote.model.Stop;
@@ -65,5 +66,12 @@ public class ScheduleServiceImpl implements ScheduleService {
     @Override
     public List<Schedule> getListSchedule() {
         return scheduleRepository.findAll();
+    }
+
+    @Override
+    public Schedule getOneSchedule(Integer id) {
+        return scheduleRepository.findById(id).orElseThrow(
+                () -> new ScheduleNotFoundException(id)
+        );
     }
 }
