@@ -7,15 +7,18 @@ import AddPlace from "components/AddPlace";
 import "./index.css";
 import AddSchedule from "components/AddSchedule";
 import { useState } from "react";
-import { LatLng, LatLngExpression } from "leaflet";
+import { LatLng } from "leaflet";
 import { MapContainer } from "react-leaflet";
 
 const MainPage = () => {
   const [listMarker, setListMarker] = useState<LatLng[]>();
-  const [listSegment, setListSegment] = useState<LatLngExpression[]>([]);
+  const [listLinePoint, setListLinePoint] = useState<LatLng[]>();
   const [draggable, setDraggable] = useState<boolean>(true);
 
-  const setSingleMarkerCallback = (marker: LatLng, draggable: boolean = true) => {
+  const setSingleMarkerCallback = (
+    marker: LatLng,
+    draggable: boolean = true
+  ) => {
     setListMarker([marker]);
     setDraggable(draggable);
   };
@@ -23,7 +26,11 @@ const MainPage = () => {
   const setListMarkerCallback = (markers: LatLng[]) => {
     setListMarker(markers);
     setDraggable(false);
-  }
+  };
+
+  const setListLinePointCallback = (points: LatLng[]) => {
+    setListLinePoint(points);
+  };
 
   return (
     <>
@@ -31,12 +38,25 @@ const MainPage = () => {
         <div className="floatPanel">
           <Routes>
             <Route path="/" element={<MenuPage />} />
-            <Route path="/schedules" element={<ListSchedules />} />
+            <Route
+              path="/schedules"
+              element={
+                <ListSchedules
+                  setListLinePointCallback={setListLinePointCallback}
+                  setListMarkerCallback={setListMarkerCallback}
+                />
+              }
+            />
             <Route
               path="/places"
               element={<ListPlaces setSingleMarker={setSingleMarkerCallback} />}
             />
-            <Route path="/addSchedule" element={<AddSchedule setListMarkerCallback={setListMarkerCallback}/>} />
+            <Route
+              path="/addSchedule"
+              element={
+                <AddSchedule setListMarkerCallback={setListMarkerCallback} />
+              }
+            />
             <Route
               path="/addPlace"
               element={
@@ -60,8 +80,8 @@ const MainPage = () => {
         <CustomMap
           setSingleMarker={setSingleMarkerCallback}
           listMarker={listMarker}
-          listSegment={listSegment}
           draggable={draggable}
+          listLinePoint={listLinePoint}
         />
       </MapContainer>
     </>

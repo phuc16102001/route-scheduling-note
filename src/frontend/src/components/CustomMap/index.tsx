@@ -6,12 +6,12 @@ import {
   Marker as LeafletMarker,
 } from "leaflet";
 import { useEffect, useMemo, useRef } from "react";
-import { Marker, TileLayer, useMap } from "react-leaflet";
+import { Marker, Polyline, TileLayer, useMap } from "react-leaflet";
 import "./index.css";
 
 interface CustomeMapInterface {
   listMarker?: LatLng[];
-  listSegment?: LatLngExpression[];
+  listLinePoint?: LatLng[];
   setSingleMarker: (marker: LatLng) => void;
   draggable: boolean;
 }
@@ -19,6 +19,7 @@ interface CustomeMapInterface {
 const CustomMap = (props: CustomeMapInterface) => {
   const listMarker = props.listMarker;
   const setSingleMarker = props.setSingleMarker;
+  const listLinePoint = props.listLinePoint;
   const draggable = props.draggable;
   const draggableMarker = useRef<LeafletMarker>(null);
   const map = useMap();
@@ -36,7 +37,7 @@ const CustomMap = (props: CustomeMapInterface) => {
   }, [setSingleMarker]);
 
   useEffect(() => {
-    if (listMarker && listMarker.length>0) {
+    if (listMarker && listMarker.length > 0) {
       map.flyToBounds(latLngBounds(listMarker));
     }
   }, [listMarker, map]);
@@ -56,6 +57,7 @@ const CustomMap = (props: CustomeMapInterface) => {
           listMarker.map((element) => <Marker position={element} />)
         )
       ) : null}
+      {listLinePoint ? <Polyline positions={listLinePoint} /> : null}
     </>
   );
 };

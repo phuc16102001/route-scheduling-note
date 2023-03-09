@@ -3,7 +3,7 @@
 interface Coordinates {
   lat: number;
   lng: number;
-};
+}
 
 interface Place {
   id?: number;
@@ -16,10 +16,15 @@ interface PlaceNote {
   note: string;
 }
 
+interface Stop {
+  stopOrder?: number;
+  coordinates: Coordinates;
+}
+
 interface Schedule {
   id?: number;
   name: string;
-  placeNotes: PlaceNote[];
-  stops?: Coordinates[];
+  placeNotes?: PlaceNote[];
+  stops?: Stops[];
+  createAt?: number;
 }
-
