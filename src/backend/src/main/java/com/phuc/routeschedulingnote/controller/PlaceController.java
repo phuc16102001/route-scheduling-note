@@ -1,6 +1,8 @@
 package com.phuc.routeschedulingnote.controller;
 
-import com.phuc.routeschedulingnote.dto.PlaceDto;
+import com.phuc.routeschedulingnote.dto.place.PlaceGetDto;
+import com.phuc.routeschedulingnote.dto.place.PlaceListDto;
+import com.phuc.routeschedulingnote.dto.place.PlacePostDto;
 import com.phuc.routeschedulingnote.model.Place;
 import com.phuc.routeschedulingnote.service.PlaceService;
 import org.modelmapper.ModelMapper;
@@ -20,24 +22,24 @@ public class PlaceController {
     private ModelMapper modelMapper;
 
     @PostMapping("/places")
-    public PlaceDto newPlace(@RequestBody PlaceDto placeDto) {
-        Place place = modelMapper.map(placeDto, Place.class);
+    public PlaceGetDto newPlace(@RequestBody PlacePostDto placePostDto) {
+        Place place = modelMapper.map(placePostDto, Place.class);
         Place createdPlace = placeService.newPlace(place);
-        return modelMapper.map(createdPlace, PlaceDto.class);
+        return modelMapper.map(createdPlace, PlaceGetDto.class);
     }
 
     @GetMapping("/places")
-    List<PlaceDto> allPlace() {
+    List<PlaceListDto> allPlace() {
         List<Place> allPlace = placeService.allPlace();
         return allPlace.stream()
-                .map(element -> modelMapper.map(element, PlaceDto.class))
+                .map(element -> modelMapper.map(element, PlaceListDto.class))
                 .collect(Collectors.toList());
     }
 
     @GetMapping("/places/{id}")
-    PlaceDto onePlace(@PathVariable Integer id) {
+    PlaceGetDto onePlace(@PathVariable Integer id) {
         Place selectedPlace = placeService.onePlace(id);
-        return modelMapper.map(selectedPlace, PlaceDto.class);
+        return modelMapper.map(selectedPlace, PlaceGetDto.class);
     }
 
     @DeleteMapping("/places/{id}")

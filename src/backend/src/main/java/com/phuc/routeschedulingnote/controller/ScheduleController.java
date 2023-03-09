@@ -1,6 +1,6 @@
 package com.phuc.routeschedulingnote.controller;
 
-import com.phuc.routeschedulingnote.dto.ScheduleDto;
+import com.phuc.routeschedulingnote.dto.schedule.ScheduleDto;
 import com.phuc.routeschedulingnote.model.Schedule;
 import com.phuc.routeschedulingnote.service.ScheduleService;
 import org.modelmapper.ModelMapper;

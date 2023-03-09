@@ -1,12 +1,11 @@
-package com.phuc.routeschedulingnote.dto;
+package com.phuc.routeschedulingnote.dto.place;
 
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.phuc.routeschedulingnote.dto.CoordinatesDto;
 import lombok.Data;
 
 @Data
-@JsonIgnoreProperties(ignoreUnknown = true)
-public class PlaceDto {
+public class PlaceGetDto {
 
     @JsonProperty("id")
     private Integer id;

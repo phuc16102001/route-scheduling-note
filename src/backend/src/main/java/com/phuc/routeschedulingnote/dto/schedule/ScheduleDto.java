@@ -1,7 +1,9 @@
-package com.phuc.routeschedulingnote.dto;
+package com.phuc.routeschedulingnote.dto.schedule;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.phuc.routeschedulingnote.dto.CoordinatesDto;
+import com.phuc.routeschedulingnote.dto.PlaceNoteDto;
 import lombok.Data;
 
 import java.util.List;

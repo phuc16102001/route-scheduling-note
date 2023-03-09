@@ -1,15 +1,16 @@
-package com.phuc.routeschedulingnote.service;
+package com.phuc.routeschedulingnote.service.impl;
 
 import com.phuc.routeschedulingnote.exception.PlaceNotFoundException;
 import com.phuc.routeschedulingnote.model.Place;
 import com.phuc.routeschedulingnote.repository.PlaceRepository;
+import com.phuc.routeschedulingnote.service.PlaceService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 
 @Service
-public class PlaceServiceImpl implements PlaceService{
+public class PlaceServiceImpl implements PlaceService {
 
     @Autowired
     PlaceRepository placeRepository;

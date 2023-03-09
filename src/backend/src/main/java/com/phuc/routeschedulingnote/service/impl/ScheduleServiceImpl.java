@@ -1,4 +1,4 @@
-package com.phuc.routeschedulingnote.service;
+package com.phuc.routeschedulingnote.service.impl;
 
 import com.phuc.routeschedulingnote.model.Coordinates;
 import com.phuc.routeschedulingnote.model.Schedule;
@@ -6,6 +6,8 @@ import com.phuc.routeschedulingnote.model.Stop;
 import com.phuc.routeschedulingnote.repository.PlaceNoteRepository;
 import com.phuc.routeschedulingnote.repository.ScheduleRepository;
 import com.phuc.routeschedulingnote.repository.StopRepository;
+import com.phuc.routeschedulingnote.service.MapService;
+import com.phuc.routeschedulingnote.service.ScheduleService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -15,7 +17,7 @@ import java.util.stream.Collectors;
 
 
 @Service
-public class ScheduleServiceImpl implements ScheduleService{
+public class ScheduleServiceImpl implements ScheduleService {
 
     @Autowired
     ScheduleRepository scheduleRepository;
