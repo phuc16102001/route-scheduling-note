@@ -50,7 +50,9 @@ Enjoy the application!
 
 ## Contribution
 
-This is a side-project which has been done by [phuc16102001]() to learn [Java Spring](https://spring.io/). You are available to use it as a reference.
+This is a side-project which has been done by [phuc16102001]() to learn [Java Spring](https://spring.io/). 
+
+You are available to use it as a reference.
 
 ## License
 
