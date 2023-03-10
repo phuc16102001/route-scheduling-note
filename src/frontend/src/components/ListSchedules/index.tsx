@@ -1,4 +1,4 @@
-import { Button, Divider, List, Skeleton } from "antd";
+import { Button, Divider, List, message, Skeleton } from "antd";
 import { useEffect, useState } from "react";
 import InfiniteScroll from "react-infinite-scroll-component";
 import { useNavigate } from "react-router-dom";
@@ -7,6 +7,8 @@ import scheduleService from "services/schedule";
 import converter from "utils/converter";
 import "./index.css";
 import { LatLng } from "leaflet";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faTrash } from "@fortawesome/free-solid-svg-icons";
 
 interface ListPlaceInterface {
   setListMarkerCallback: (marker: LatLng[]) => void;
@@ -67,6 +69,17 @@ const ListSchedules = (props: ListPlaceInterface) => {
     }
   };
 
+  const onDeleteSchedule = async (schedule: Schedule) => {
+    try {
+      await scheduleService.deleteSchedule(schedule);
+      await fetchSchedules();
+      message.success("Boom, it has disappear!")
+    } catch (e) {
+      console.log(e);
+      message.error("Oops! Something is not correct")
+    }
+  }
+
   return (
     <div
       id="scrollableDiv"
@@ -109,7 +122,11 @@ const ListSchedules = (props: ListPlaceInterface) => {
                   </div>
                 </div>
               </div>
-              <Button danger>Delete</Button>
+              <FontAwesomeIcon
+                icon={faTrash}
+                onClick={() => onDeleteSchedule(schedule)}
+                className="deleteIcon"
+              />
             </List.Item>
           )}
         ></List>

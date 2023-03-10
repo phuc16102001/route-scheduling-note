@@ -2,6 +2,7 @@ package com.phuc.routeschedulingnote.model;
 
 import jakarta.persistence.*;
 import lombok.Data;
+import org.hibernate.annotations.Cascade;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
@@ -29,9 +30,11 @@ public class Schedule {
     private LocalDateTime updateAt;
 
     @OneToMany(mappedBy = "schedule")
+    @Cascade(value = {org.hibernate.annotations.CascadeType.DELETE})
     private List<PlaceNote> placeNotes;
 
     @OneToMany(mappedBy = "schedule")
+    @Cascade(value = {org.hibernate.annotations.CascadeType.DELETE})
     private List<Stop> stops;
 
 }

@@ -69,9 +69,14 @@ public class ScheduleServiceImpl implements ScheduleService {
     }
 
     @Override
-    public Schedule getOneSchedule(Integer id) {
+    public Schedule getById(Integer id) {
         return scheduleRepository.findById(id).orElseThrow(
                 () -> new ScheduleNotFoundException(id)
         );
+    }
+
+    @Override
+    public void deleteById(Integer id) {
+        scheduleRepository.deleteById(id);
     }
 }

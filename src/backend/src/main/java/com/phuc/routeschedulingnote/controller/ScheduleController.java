@@ -38,9 +38,14 @@ public class ScheduleController {
 
 
     @GetMapping("/schedules/{id}")
-    public ScheduleGetDto getOneSchedule(@PathVariable Integer id) {
-        Schedule schedules = scheduleService.getOneSchedule(id);
+    public ScheduleGetDto getById(@PathVariable Integer id) {
+        Schedule schedules = scheduleService.getById(id);
         return modelMapper.map(schedules, ScheduleGetDto.class);
+    }
+
+    @DeleteMapping("/schedules/{id}")
+    public void deleteById(@PathVariable Integer id) {
+        scheduleService.deleteById(id);
     }
 
 }

@@ -9,6 +9,7 @@ public interface ScheduleService {
     Schedule addSchedule(Schedule schedule);
     List<Schedule> getListSchedule();
 
-    Schedule getOneSchedule(Integer id);
+    Schedule getById(Integer id);
+    void deleteById(Integer Id);
 
 }
