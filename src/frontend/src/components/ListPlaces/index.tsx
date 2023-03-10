@@ -11,10 +11,13 @@ import "./index.css";
 
 interface ListPlaceInterface {
   setSingleMarker: (marker: LatLng, draggable: boolean) => void;
+  resetMapCallback: () => void;
 }
 
 const ListPlaces = (props: ListPlaceInterface) => {
   const setSingleMarker = props.setSingleMarker;
+  const resetMapCallback = props.resetMapCallback;
+
   const [data, setData] = useState<Place[]>([]);
   const [numberOfData, setNumberOfData] = useState<number>(0);
   const navigate = useNavigate();
@@ -39,9 +42,10 @@ const ListPlaces = (props: ListPlaceInterface) => {
       const response = await placeService.getPlace(place);
       const fetchPlace: Place = response.data;
       const coordinates = fetchPlace.coordinates;
+      resetMapCallback();
       setSingleMarker(new LatLng(coordinates!.lat, coordinates!.lng), false);
     } catch (e) {
-      console.log(e)
+      console.log(e);
     }
   };
 
@@ -58,6 +62,7 @@ const ListPlaces = (props: ListPlaceInterface) => {
 
   useEffect(() => {
     fetchInit();
+    resetMapCallback();
   }, []);
 
   return (

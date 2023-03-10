@@ -48,13 +48,16 @@ const CustomMap = (props: CustomeMapInterface) => {
       {listMarker ? (
         listMarker.length === 1 ? (
           <Marker
+            key={"marker"}
             eventHandlers={markerHandler}
             draggable={draggable}
             ref={draggableMarker}
             position={listMarker[0]}
           />
         ) : (
-          listMarker.map((element) => <Marker position={element} />)
+          listMarker.map((element: LatLng, index: number) => (
+            <Marker key={`marker_${index}`} position={element} />
+          ))
         )
       ) : null}
       {listLinePoint ? <Polyline positions={listLinePoint} /> : null}

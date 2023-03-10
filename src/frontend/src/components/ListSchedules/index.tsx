@@ -11,11 +11,13 @@ import { LatLng } from "leaflet";
 interface ListPlaceInterface {
   setListMarkerCallback: (marker: LatLng[]) => void;
   setListLinePointCallback: (points: LatLng[]) => void;
+  resetMapCallback: () => void;
 }
 
 const ListSchedules = (props: ListPlaceInterface) => {
   const setListMarkerCallback = props.setListMarkerCallback;
   const setListLinePointCallback = props.setListLinePointCallback;
+  const resetMapCallback = props.resetMapCallback;
 
   const [data, setData] = useState<Schedule[]>([]);
   const [numberOfData, setNumberOfData] = useState<number>(0);
@@ -37,6 +39,7 @@ const ListSchedules = (props: ListPlaceInterface) => {
   };
 
   useEffect(() => {
+    resetMapCallback();
     fetchSchedules();
   }, []);
 

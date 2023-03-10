@@ -1,7 +1,7 @@
 import { Button, Descriptions, Input, message } from "antd";
 import Search from "antd/es/input/Search";
 import { latLng, LatLng } from "leaflet";
-import { ChangeEvent, useState } from "react";
+import { ChangeEvent, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import mapService from "services/map";
 import placeService from "services/place";
@@ -9,6 +9,7 @@ import "./index.css";
 
 interface AddPlaceProps {
   setSingleMarkerCallback: (marker: LatLng) => void;
+  resetMapCallback: () => void;
   listMarker?: LatLng[];
 }
 
@@ -17,7 +18,8 @@ const AddPlace = (props: AddPlaceProps) => {
   const [name, setName] = useState<string>("");
   const [address, setAddress] = useState<string>("");
   const [searching, setSearching] = useState<boolean>(false);
-  const setSingleMarker = props.setSingleMarkerCallback;
+  const setSingleMarkerCallback = props.setSingleMarkerCallback;
+  const resetMapCallback = props.resetMapCallback;
   const listMarker = props.listMarker;
 
   const searchPlace = async (value: string) => {
@@ -25,7 +27,7 @@ const AddPlace = (props: AddPlaceProps) => {
       setSearching(true);
       const response = await mapService.searchGeoText(value);
       const { data } = response;
-      setSingleMarker(latLng(data.lat, data.lng));
+      setSingleMarkerCallback(latLng(data.lat, data.lng));
       message.success("We have found your place!");
     } catch (e) {
       console.log(e);
@@ -57,7 +59,7 @@ const AddPlace = (props: AddPlaceProps) => {
       };
       await placeService.addPlace(place);
       message.success("Your place is added.");
-      navigate("/places")
+      navigate("/places");
     } catch (e) {
       console.log(e);
       message.error("There was some error occured.");
@@ -75,6 +77,8 @@ const AddPlace = (props: AddPlaceProps) => {
   ) => {
     setAddress(event.target.value);
   };
+
+  useEffect(() => resetMapCallback, [resetMapCallback]);
 
   return (
     <div className="floatingPanel">

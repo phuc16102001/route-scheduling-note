@@ -13,12 +13,14 @@ import "./index.css";
 
 interface AddScheduleProps {
   setListMarkerCallback: (markers: LatLng[]) => void;
+  resetMapCallback: () => void;
 }
 
 const AddSchedule = (props: AddScheduleProps) => {
   const navigate = useNavigate();
   const maxPlaces = 5;
   const setListMarkerCallback = props.setListMarkerCallback;
+  const resetMapCallback = props.resetMapCallback;
 
   const [scheduleName, setScheduleName] = useState<string>("");
   const [note, setNote] = useState<string>("");
@@ -38,7 +40,10 @@ const AddSchedule = (props: AddScheduleProps) => {
   const resetListMarker = (listMarker: PlaceNote[]) => {
     const markers: LatLng[] = listMarker.map(
       (element) =>
-        new LatLng(element.place.coordinates!.lat, element.place.coordinates!.lng)
+        new LatLng(
+          element.place.coordinates!.lat,
+          element.place.coordinates!.lng
+        )
     );
     setListMarkerCallback(markers);
   };
@@ -56,7 +61,7 @@ const AddSchedule = (props: AddScheduleProps) => {
       setListSelectedPlaceNote(newList);
       resetListMarker(newList);
     } catch (e) {
-        console.log(e);
+      console.log(e);
     } finally {
       setAddPlaceOpen(false);
     }
@@ -110,12 +115,13 @@ const AddSchedule = (props: AddScheduleProps) => {
   };
 
   useEffect(() => {
+    resetMapCallback();
     fetchInit();
   }, []);
 
   const onCancel = async () => {
     navigate("/schedules");
-    resetListMarker([]);
+    resetMapCallback();
   };
 
   const onScheduleAdd = async () => {
@@ -128,7 +134,7 @@ const AddSchedule = (props: AddScheduleProps) => {
       message.success("Add schedule successfully");
       navigate("/schedules");
     } catch (e) {
-      console.log(e)
+      console.log(e);
       message.error("Sorry, something was wrong!");
     }
   };

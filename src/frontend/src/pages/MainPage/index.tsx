@@ -32,6 +32,11 @@ const MainPage = () => {
     setListLinePoint(points);
   };
 
+  const resetMapCallback = () => {
+    setListLinePoint([]);
+    setListMarker([]);
+  };
+
   return (
     <>
       <BrowserRouter>
@@ -44,17 +49,26 @@ const MainPage = () => {
                 <ListSchedules
                   setListLinePointCallback={setListLinePointCallback}
                   setListMarkerCallback={setListMarkerCallback}
+                  resetMapCallback={resetMapCallback}
                 />
               }
             />
             <Route
               path="/places"
-              element={<ListPlaces setSingleMarker={setSingleMarkerCallback} />}
+              element={
+                <ListPlaces
+                  setSingleMarker={setSingleMarkerCallback}
+                  resetMapCallback={resetMapCallback}
+                />
+              }
             />
             <Route
               path="/addSchedule"
               element={
-                <AddSchedule setListMarkerCallback={setListMarkerCallback} />
+                <AddSchedule
+                  setListMarkerCallback={setListMarkerCallback}
+                  resetMapCallback={resetMapCallback}
+                />
               }
             />
             <Route
@@ -63,6 +77,7 @@ const MainPage = () => {
                 <AddPlace
                   listMarker={listMarker}
                   setSingleMarkerCallback={setSingleMarkerCallback}
+                  resetMapCallback={resetMapCallback}
                 />
               }
             />
