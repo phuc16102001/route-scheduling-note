@@ -9,6 +9,7 @@ import "./index.css";
 import { LatLng } from "leaflet";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faTrash } from "@fortawesome/free-solid-svg-icons";
+import { LatLngWithNote, Schedule, Stop } from "react-app-env";
 
 interface ListPlaceInterface {
   setListMarkerCallback: (marker: LatLng[]) => void;
@@ -50,13 +51,14 @@ const ListSchedules = (props: ListPlaceInterface) => {
       const response = await scheduleService.getSchedule(schedule);
       const fetchedSchedule: Schedule = response.data;
       setListMarkerCallback(
-        fetchedSchedule.placeNotes!.map(
-          (element) =>
-            new LatLng(
-              element.place.coordinates!.lat,
-              element.place.coordinates!.lng
-            )
-        )
+        fetchedSchedule.placeNotes!.map((element) => {
+          const latLngWithNote: LatLngWithNote = new LatLng(
+            element.place.coordinates!.lat,
+            element.place.coordinates!.lng
+          );
+          latLngWithNote.note = `(${element.place.name}) ${element.note}`;
+          return latLngWithNote;
+        })
       );
       setListLinePointCallback(
         fetchedSchedule.stops!.map(
@@ -73,12 +75,12 @@ const ListSchedules = (props: ListPlaceInterface) => {
     try {
       await scheduleService.deleteSchedule(schedule);
       await fetchSchedules();
-      message.success("Boom, it has disappear!")
+      message.success("Boom, it has disappear!");
     } catch (e) {
       console.log(e);
-      message.error("Oops! Something is not correct")
+      message.error("Oops! Something is not correct");
     }
-  }
+  };
 
   return (
     <div

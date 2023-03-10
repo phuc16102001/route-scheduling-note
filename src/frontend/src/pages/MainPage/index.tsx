@@ -9,21 +9,23 @@ import AddSchedule from "components/AddSchedule";
 import { useState } from "react";
 import { LatLng } from "leaflet";
 import { MapContainer } from "react-leaflet";
+import { LatLngWithNote } from "react-app-env";
 
 const MainPage = () => {
-  const [listMarker, setListMarker] = useState<LatLng[]>();
-  const [listLinePoint, setListLinePoint] = useState<LatLng[]>();
+  const [listMarker, setListMarker] = useState<LatLng[] | LatLngWithNote[]>([]);
+  const [listLinePoint, setListLinePoint] = useState<LatLng[]>([]);
   const [draggable, setDraggable] = useState<boolean>(true);
 
   const setSingleMarkerCallback = (
-    marker: LatLng,
+    marker: LatLng | LatLngWithNote,
     draggable: boolean = true
   ) => {
-    setListMarker([marker]);
+    const listMarker: LatLng[] | LatLngWithNote[] = [marker]
+    setListMarker(listMarker);
     setDraggable(draggable);
   };
 
-  const setListMarkerCallback = (markers: LatLng[]) => {
+  const setListMarkerCallback = (markers: LatLng[] | LatLngWithNote[]) => {
     setListMarker(markers);
     setDraggable(false);
   };

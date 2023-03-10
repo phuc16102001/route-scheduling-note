@@ -1,5 +1,7 @@
 /// <reference types="react-scripts" />
 
+import { LatLng } from "leaflet";
+
 interface Coordinates {
   lat: number;
   lng: number;
@@ -27,4 +29,8 @@ interface Schedule {
   placeNotes?: PlaceNote[];
   stops?: Stops[];
   createAt?: number;
+}
+
+interface LatLngWithNote extends LatLng {
+  note?: string;
 }

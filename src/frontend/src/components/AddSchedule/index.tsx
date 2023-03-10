@@ -30,6 +30,7 @@ const AddSchedule = (props: AddScheduleProps) => {
     useState<boolean>(false);
   const [addPlaceOpen, setAddPlaceOpen] = useState<boolean>(false);
   const [addNoteOpen, setAddNoteOpen] = useState<boolean>(false);
+  const [confirmLoading, setConfirmLoading] = useState<boolean>(false);
 
   const [listPlace, setListPlace] = useState<Place[]>([]);
   const [numberOfPlace, setNumberOfPlace] = useState<number>(0);
@@ -126,6 +127,7 @@ const AddSchedule = (props: AddScheduleProps) => {
 
   const onScheduleAdd = async () => {
     try {
+      setConfirmLoading(true);
       const schedule: Schedule = {
         name: scheduleName,
         placeNotes: listSelectedPlaceNote,
@@ -136,6 +138,8 @@ const AddSchedule = (props: AddScheduleProps) => {
     } catch (e) {
       console.log(e);
       message.error("Sorry, something was wrong!");
+    } finally {
+      setConfirmLoading(true);
     }
   };
 
@@ -160,6 +164,7 @@ const AddSchedule = (props: AddScheduleProps) => {
         open={confirmScheduleOpen}
         onCancel={() => setConfirmScheduleOpen(false)}
         onOk={onScheduleAdd}
+        confirmLoading={confirmLoading}
       >
         <Input
           value={scheduleName}

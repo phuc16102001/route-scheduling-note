@@ -2,15 +2,16 @@ import { Button, Descriptions, Input, message } from "antd";
 import Search from "antd/es/input/Search";
 import { latLng, LatLng } from "leaflet";
 import { ChangeEvent, useEffect, useState } from "react";
+import { LatLngWithNote, Place } from "react-app-env";
 import { useNavigate } from "react-router-dom";
 import mapService from "services/map";
 import placeService from "services/place";
 import "./index.css";
 
 interface AddPlaceProps {
-  setSingleMarkerCallback: (marker: LatLng) => void;
+  setSingleMarkerCallback: (marker: LatLng | LatLngWithNote) => void;
   resetMapCallback: () => void;
-  listMarker?: LatLng[];
+  listMarker?: LatLng[] | LatLngWithNote[];
 }
 
 const AddPlace = (props: AddPlaceProps) => {
@@ -78,7 +79,9 @@ const AddPlace = (props: AddPlaceProps) => {
     setAddress(event.target.value);
   };
 
-  useEffect(() => resetMapCallback, [resetMapCallback]);
+  useEffect(() => {
+    resetMapCallback();
+  }, []);
 
   return (
     <div className="floatingPanel">
@@ -101,10 +104,14 @@ const AddPlace = (props: AddPlaceProps) => {
         size="middle"
       >
         <Descriptions.Item label="Latitude">
-          {listMarker ? listMarker[0].lat.toFixed(3) : "Unselected"}
+          {listMarker && listMarker.length > 0
+            ? listMarker[0].lat.toFixed(3)
+            : "Unselected"}
         </Descriptions.Item>
         <Descriptions.Item label="Longtitude">
-          {listMarker ? listMarker[0].lng.toFixed(3) : "Unselected"}
+          {listMarker && listMarker.length > 0
+            ? listMarker[0].lng.toFixed(3)
+            : "Unselected"}
         </Descriptions.Item>
       </Descriptions>
       <Input

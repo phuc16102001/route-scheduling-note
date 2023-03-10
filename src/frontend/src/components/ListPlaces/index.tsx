@@ -8,9 +8,13 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faTrash } from "@fortawesome/free-solid-svg-icons";
 import { LatLng } from "leaflet";
 import "./index.css";
+import { LatLngWithNote, Place } from "react-app-env";
 
 interface ListPlaceInterface {
-  setSingleMarker: (marker: LatLng, draggable: boolean) => void;
+  setSingleMarker: (
+    marker: LatLng | LatLngWithNote,
+    draggable: boolean
+  ) => void;
   resetMapCallback: () => void;
 }
 
@@ -42,8 +46,10 @@ const ListPlaces = (props: ListPlaceInterface) => {
       const response = await placeService.getPlace(place);
       const fetchPlace: Place = response.data;
       const coordinates = fetchPlace.coordinates;
+      const latLngWithNote: LatLngWithNote = new LatLng(coordinates!.lat, coordinates!.lng);
+      latLngWithNote.note = place.name
       resetMapCallback();
-      setSingleMarker(new LatLng(coordinates!.lat, coordinates!.lng), false);
+      setSingleMarker(latLngWithNote, false);
     } catch (e) {
       console.log(e);
     }
