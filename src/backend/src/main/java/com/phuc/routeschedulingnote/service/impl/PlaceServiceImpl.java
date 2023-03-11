@@ -2,6 +2,7 @@ package com.phuc.routeschedulingnote.service.impl;
 
 import com.phuc.routeschedulingnote.exception.CoreApiException;
 import com.phuc.routeschedulingnote.model.Place;
+import com.phuc.routeschedulingnote.model.PlaceNote;
 import com.phuc.routeschedulingnote.repository.PlaceRepository;
 import com.phuc.routeschedulingnote.service.PlaceService;
 import com.phuc.routeschedulingnote.support.error.ErrorType;
@@ -40,6 +41,20 @@ public class PlaceServiceImpl implements PlaceService {
 
     @Override
     public void deleteById(Integer id) {
+        ErrorType notFound = new ErrorType(
+                HttpStatus.NOT_FOUND,
+                ExitCode.E404,
+                "Place not found with id = " + id);
+        Place place = placeRepository.findById(id)
+                .orElseThrow(() -> new CoreApiException(notFound));
+        List<PlaceNote> placeNotes = place.getPlaceNotes();
+        if (placeNotes.size()>0) {
+            ErrorType involveException = new ErrorType(
+                    HttpStatus.CONFLICT,
+                    ExitCode.E1000,
+                    "Place are related to some other resource");
+            throw new CoreApiException(involveException);
+        }
         placeRepository.deleteById(id);
     }
 }
