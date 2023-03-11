@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @RestController
 public class MapController {
@@ -30,11 +31,11 @@ public class MapController {
     public ApiResponse<List<CoordinatesDto>> routeDirection(@RequestBody List<CoordinatesDto> coordinatesDtoList) {
         List<Coordinates> coordinates = coordinatesDtoList.stream().map(
                 element -> modelMapper.map(element, Coordinates.class)
-        ).toList();
+        ).collect(Collectors.toList());
         List<Coordinates> routes = mapService.routeDirection(coordinates);
         List<CoordinatesDto> coordinatesDto = routes.stream().map(
                 element -> modelMapper.map(element, CoordinatesDto.class)
-        ).toList();
+        ).collect(Collectors.toList());
         return ApiResponse.success(coordinatesDto);
     }
 }

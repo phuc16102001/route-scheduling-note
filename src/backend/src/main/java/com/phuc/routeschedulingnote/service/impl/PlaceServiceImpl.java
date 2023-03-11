@@ -1,9 +1,9 @@
 package com.phuc.routeschedulingnote.service.impl;
 
+import com.phuc.routeschedulingnote.exception.CoreApiException;
 import com.phuc.routeschedulingnote.model.Place;
 import com.phuc.routeschedulingnote.repository.PlaceRepository;
 import com.phuc.routeschedulingnote.service.PlaceService;
-import com.phuc.routeschedulingnote.support.error.CoreApiException;
 import com.phuc.routeschedulingnote.support.error.ErrorType;
 import com.phuc.routeschedulingnote.support.error.ExitCode;
 import org.springframework.beans.factory.annotation.Autowired;

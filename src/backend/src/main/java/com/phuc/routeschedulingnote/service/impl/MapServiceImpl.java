@@ -4,9 +4,9 @@ import com.phuc.routeschedulingnote.dto.ors.OrsDirectionDto;
 import com.phuc.routeschedulingnote.dto.ors.OrsDirectionQueryDto;
 import com.phuc.routeschedulingnote.dto.ors.OrsGeoFeatureDto;
 import com.phuc.routeschedulingnote.dto.ors.OrsGeocodeDto;
+import com.phuc.routeschedulingnote.exception.CoreApiException;
 import com.phuc.routeschedulingnote.model.Coordinates;
 import com.phuc.routeschedulingnote.service.MapService;
-import com.phuc.routeschedulingnote.support.error.CoreApiException;
 import com.phuc.routeschedulingnote.support.error.ErrorType;
 import com.phuc.routeschedulingnote.support.error.ExitCode;
 import org.modelmapper.ModelMapper;
@@ -80,7 +80,7 @@ public class MapServiceImpl implements MapService {
                     coordinate.setLng(element.get(0));
                     return coordinate;
                 }
-        ).toList();
+        ).collect(Collectors.toList());
     }
 
 

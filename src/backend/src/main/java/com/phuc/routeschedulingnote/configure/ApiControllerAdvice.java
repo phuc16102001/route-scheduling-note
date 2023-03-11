@@ -1,6 +1,6 @@
 package com.phuc.routeschedulingnote.configure;
 
-import com.phuc.routeschedulingnote.support.error.CoreApiException;
+import com.phuc.routeschedulingnote.exception.CoreApiException;
 import com.phuc.routeschedulingnote.support.error.ErrorType;
 import com.phuc.routeschedulingnote.support.response.ApiResponse;
 import org.springframework.http.ResponseEntity;
@@ -20,6 +20,7 @@ public class ApiControllerAdvice {
 
     @ExceptionHandler(Exception.class)
     public ResponseEntity<ApiResponse<?>> handleException(Exception e) {
+        System.err.println(e.getMessage());
         ErrorType defaultError = new ErrorType();
         return new ResponseEntity<>(
                 ApiResponse.error(defaultError),

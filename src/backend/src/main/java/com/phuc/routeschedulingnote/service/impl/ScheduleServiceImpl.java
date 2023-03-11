@@ -1,5 +1,6 @@
 package com.phuc.routeschedulingnote.service.impl;
 
+import com.phuc.routeschedulingnote.exception.CoreApiException;
 import com.phuc.routeschedulingnote.model.Coordinates;
 import com.phuc.routeschedulingnote.model.Schedule;
 import com.phuc.routeschedulingnote.model.Stop;
@@ -8,7 +9,6 @@ import com.phuc.routeschedulingnote.repository.ScheduleRepository;
 import com.phuc.routeschedulingnote.repository.StopRepository;
 import com.phuc.routeschedulingnote.service.MapService;
 import com.phuc.routeschedulingnote.service.ScheduleService;
-import com.phuc.routeschedulingnote.support.error.CoreApiException;
 import com.phuc.routeschedulingnote.support.error.ErrorType;
 import com.phuc.routeschedulingnote.support.error.ExitCode;
 import jakarta.transaction.Transactional;
@@ -79,9 +79,8 @@ public class ScheduleServiceImpl implements ScheduleService {
                 HttpStatus.NOT_FOUND,
                 ExitCode.E404,
                 "Cannot find schedule with id = " + id);
-        return scheduleRepository.findById(id).orElseThrow(
-                () -> new CoreApiException(notFound)
-        );
+        return scheduleRepository.findByIdSortStopOrder(id)
+                .orElseThrow(() -> new CoreApiException(notFound));
     }
 
     @Override

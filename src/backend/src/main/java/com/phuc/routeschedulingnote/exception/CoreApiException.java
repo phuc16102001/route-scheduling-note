@@ -1,5 +1,6 @@
-package com.phuc.routeschedulingnote.support.error;
+package com.phuc.routeschedulingnote.exception;
 
+import com.phuc.routeschedulingnote.support.error.ErrorType;
 import lombok.Getter;
 
 @Getter

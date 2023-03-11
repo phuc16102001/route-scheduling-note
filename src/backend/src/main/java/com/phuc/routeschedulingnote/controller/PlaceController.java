@@ -11,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @RestController
 public class PlaceController {
@@ -34,7 +35,7 @@ public class PlaceController {
         List<Place> allPlace = placeService.allPlace();
         List<PlaceListDto> placeListDto = allPlace.stream()
                 .map(element -> modelMapper.map(element, PlaceListDto.class))
-                .toList();
+                .collect(Collectors.toList());
         return ApiResponse.success(placeListDto);
     }
 
