@@ -5,12 +5,12 @@ import com.phuc.routeschedulingnote.dto.schedule.ScheduleListDto;
 import com.phuc.routeschedulingnote.dto.schedule.SchedulePostDto;
 import com.phuc.routeschedulingnote.model.Schedule;
 import com.phuc.routeschedulingnote.service.ScheduleService;
+import com.phuc.routeschedulingnote.support.response.ApiResponse;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 @RestController
 public class ScheduleController {
@@ -22,30 +22,34 @@ public class ScheduleController {
     ScheduleService scheduleService;
 
     @PostMapping("/schedules")
-    public ScheduleGetDto addSchedule(@RequestBody SchedulePostDto scheduleDto) {
+    public ApiResponse<ScheduleGetDto> addSchedule(@RequestBody SchedulePostDto scheduleDto) {
         Schedule schedule = modelMapper.map(scheduleDto, Schedule.class);
         Schedule result = scheduleService.addSchedule(schedule);
-        return modelMapper.map(result, ScheduleGetDto.class);
+        ScheduleGetDto scheduleGetDto = modelMapper.map(result, ScheduleGetDto.class);
+        return ApiResponse.success(scheduleGetDto);
     }
 
     @GetMapping("/schedules")
-    public List<ScheduleListDto> getListSchedule() {
+    public ApiResponse<List<ScheduleListDto>> getListSchedule() {
         List<Schedule> schedules = scheduleService.getListSchedule();
-        return schedules.stream().map(
+        List<ScheduleListDto> scheduleListDto = schedules.stream().map(
             element -> modelMapper.map(element, ScheduleListDto.class)
-        ).collect(Collectors.toList());
+        ).toList();
+        return ApiResponse.success(scheduleListDto);
     }
 
 
     @GetMapping("/schedules/{id}")
-    public ScheduleGetDto getById(@PathVariable Integer id) {
+    public ApiResponse<ScheduleGetDto> getById(@PathVariable Integer id) {
         Schedule schedules = scheduleService.getById(id);
-        return modelMapper.map(schedules, ScheduleGetDto.class);
+        ScheduleGetDto scheduleGetDto = modelMapper.map(schedules, ScheduleGetDto.class);
+        return ApiResponse.success(scheduleGetDto);
     }
 
     @DeleteMapping("/schedules/{id}")
-    public void deleteById(@PathVariable Integer id) {
+    public ApiResponse<?> deleteById(@PathVariable Integer id) {
         scheduleService.deleteById(id);
+        return ApiResponse.success();
     }
 
 }

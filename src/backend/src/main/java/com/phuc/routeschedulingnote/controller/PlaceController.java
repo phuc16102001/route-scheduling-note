@@ -5,12 +5,12 @@ import com.phuc.routeschedulingnote.dto.place.PlaceListDto;
 import com.phuc.routeschedulingnote.dto.place.PlacePostDto;
 import com.phuc.routeschedulingnote.model.Place;
 import com.phuc.routeschedulingnote.service.PlaceService;
+import com.phuc.routeschedulingnote.support.response.ApiResponse;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 @RestController
 public class PlaceController {
@@ -22,28 +22,32 @@ public class PlaceController {
     private ModelMapper modelMapper;
 
     @PostMapping("/places")
-    public PlaceGetDto newPlace(@RequestBody PlacePostDto placePostDto) {
+    public ApiResponse<PlaceGetDto> newPlace(@RequestBody PlacePostDto placePostDto) {
         Place place = modelMapper.map(placePostDto, Place.class);
         Place createdPlace = placeService.newPlace(place);
-        return modelMapper.map(createdPlace, PlaceGetDto.class);
+        PlaceGetDto placeGetDto = modelMapper.map(createdPlace, PlaceGetDto.class);
+        return ApiResponse.success(placeGetDto);
     }
 
     @GetMapping("/places")
-    List<PlaceListDto> allPlace() {
+    public ApiResponse<List<PlaceListDto>> allPlace() {
         List<Place> allPlace = placeService.allPlace();
-        return allPlace.stream()
+        List<PlaceListDto> placeListDto = allPlace.stream()
                 .map(element -> modelMapper.map(element, PlaceListDto.class))
-                .collect(Collectors.toList());
+                .toList();
+        return ApiResponse.success(placeListDto);
     }
 
     @GetMapping("/places/{id}")
-    PlaceGetDto onePlace(@PathVariable Integer id) {
+    public ApiResponse<PlaceGetDto> onePlace(@PathVariable Integer id) {
         Place selectedPlace = placeService.onePlace(id);
-        return modelMapper.map(selectedPlace, PlaceGetDto.class);
+        PlaceGetDto placeGetDto = modelMapper.map(selectedPlace, PlaceGetDto.class);
+        return ApiResponse.success(placeGetDto);
     }
 
     @DeleteMapping("/places/{id}")
-    void deletePlace(@PathVariable Integer id) {
+    public ApiResponse<?> deletePlace(@PathVariable Integer id) {
         placeService.deleteById(id);
+        return ApiResponse.success();
     }
 }

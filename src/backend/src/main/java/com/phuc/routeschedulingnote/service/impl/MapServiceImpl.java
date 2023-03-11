@@ -4,14 +4,17 @@ import com.phuc.routeschedulingnote.dto.ors.OrsDirectionDto;
 import com.phuc.routeschedulingnote.dto.ors.OrsDirectionQueryDto;
 import com.phuc.routeschedulingnote.dto.ors.OrsGeoFeatureDto;
 import com.phuc.routeschedulingnote.dto.ors.OrsGeocodeDto;
-import com.phuc.routeschedulingnote.exception.GeocodeNotFoundException;
 import com.phuc.routeschedulingnote.model.Coordinates;
 import com.phuc.routeschedulingnote.service.MapService;
+import com.phuc.routeschedulingnote.support.error.CoreApiException;
+import com.phuc.routeschedulingnote.support.error.ErrorType;
+import com.phuc.routeschedulingnote.support.error.ExitCode;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
@@ -41,7 +44,11 @@ public class MapServiceImpl implements MapService {
         assert searchObj != null;
         List<OrsGeoFeatureDto> features = searchObj.getFeatures();
         if (features.size()==0) {
-            throw new GeocodeNotFoundException(searchText);
+            ErrorType notFound = new ErrorType(
+                    HttpStatus.NOT_FOUND,
+                    ExitCode.E404,
+                    "Cannot find place with search text = " + searchText);
+            throw new CoreApiException(notFound);
         }
         List<Double> coordinates = features.get(0).getGeometry().getCoordinates();
 
@@ -64,6 +71,7 @@ public class MapServiceImpl implements MapService {
         headers.set("Authorization", orsApiKey);
         HttpEntity<OrsDirectionQueryDto> entity = new HttpEntity<>(query, headers);
         OrsDirectionDto searchObj = restTemplate.postForObject(uri, entity, OrsDirectionDto.class);
+        assert searchObj != null;
 
         return searchObj.getFeatures().get(0).getGeometry().getCoordinates().stream().map(
                 element -> {
@@ -72,7 +80,7 @@ public class MapServiceImpl implements MapService {
                     coordinate.setLng(element.get(0));
                     return coordinate;
                 }
-        ).collect(Collectors.toList());
+        ).toList();
     }
 
 

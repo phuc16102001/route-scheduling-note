@@ -1,6 +1,5 @@
 package com.phuc.routeschedulingnote.service.impl;
 
-import com.phuc.routeschedulingnote.exception.ScheduleNotFoundException;
 import com.phuc.routeschedulingnote.model.Coordinates;
 import com.phuc.routeschedulingnote.model.Schedule;
 import com.phuc.routeschedulingnote.model.Stop;
@@ -9,7 +8,12 @@ import com.phuc.routeschedulingnote.repository.ScheduleRepository;
 import com.phuc.routeschedulingnote.repository.StopRepository;
 import com.phuc.routeschedulingnote.service.MapService;
 import com.phuc.routeschedulingnote.service.ScheduleService;
+import com.phuc.routeschedulingnote.support.error.CoreApiException;
+import com.phuc.routeschedulingnote.support.error.ErrorType;
+import com.phuc.routeschedulingnote.support.error.ExitCode;
+import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -33,6 +37,7 @@ public class ScheduleServiceImpl implements ScheduleService {
     MapService mapService;
 
     @Override
+    @Transactional
     public Schedule addSchedule(Schedule schedule) {
         List<Coordinates> coordinatesList = schedule.getPlaceNotes().stream().map(
                 element -> element.getPlace().getCoordinates()
@@ -70,8 +75,12 @@ public class ScheduleServiceImpl implements ScheduleService {
 
     @Override
     public Schedule getById(Integer id) {
+        ErrorType notFound = new ErrorType(
+                HttpStatus.NOT_FOUND,
+                ExitCode.E404,
+                "Cannot find schedule with id = " + id);
         return scheduleRepository.findById(id).orElseThrow(
-                () -> new ScheduleNotFoundException(id)
+                () -> new CoreApiException(notFound)
         );
     }
 

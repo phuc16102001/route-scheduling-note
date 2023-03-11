@@ -3,12 +3,12 @@ package com.phuc.routeschedulingnote.controller;
 import com.phuc.routeschedulingnote.dto.CoordinatesDto;
 import com.phuc.routeschedulingnote.model.Coordinates;
 import com.phuc.routeschedulingnote.service.MapService;
+import com.phuc.routeschedulingnote.support.response.ApiResponse;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 @RestController
 public class MapController {
@@ -20,22 +20,21 @@ public class MapController {
     ModelMapper modelMapper;
 
     @GetMapping("/search")
-    public CoordinatesDto searchCoordinate(
-            @RequestParam(name="searchText") String searchText) {
+    public ApiResponse<CoordinatesDto> searchCoordinate(@RequestParam(name="searchText") String searchText) {
         Coordinates coordinates = mapService.searchCoordinate(searchText);
-        return modelMapper.map(coordinates, CoordinatesDto.class);
+        CoordinatesDto coordinatesDto = modelMapper.map(coordinates, CoordinatesDto.class);
+        return ApiResponse.success(coordinatesDto);
     }
 
     @PostMapping("/direction")
-    public List<CoordinatesDto> routeDirection(
-            @RequestBody List<CoordinatesDto> coordinatesDtoList
-    ) {
-        List<Coordinates> coordinates = coordinatesDtoList.stream()
-                .map(element -> modelMapper.map(element, Coordinates.class))
-                .collect(Collectors.toList());
+    public ApiResponse<List<CoordinatesDto>> routeDirection(@RequestBody List<CoordinatesDto> coordinatesDtoList) {
+        List<Coordinates> coordinates = coordinatesDtoList.stream().map(
+                element -> modelMapper.map(element, Coordinates.class)
+        ).toList();
         List<Coordinates> routes = mapService.routeDirection(coordinates);
-        return routes.stream()
-                .map(element -> modelMapper.map(element, CoordinatesDto.class))
-                .collect(Collectors.toList());
+        List<CoordinatesDto> coordinatesDto = routes.stream().map(
+                element -> modelMapper.map(element, CoordinatesDto.class)
+        ).toList();
+        return ApiResponse.success(coordinatesDto);
     }
 }
