@@ -9,6 +9,8 @@ import { faTrash } from "@fortawesome/free-solid-svg-icons";
 import { LatLng } from "leaflet";
 import "./index.css";
 import { LatLngWithNote, Place } from "react-app-env";
+import { isAxiosError } from "axios";
+import ExitCode from "config/exitcode";
 
 interface ListPlaceInterface {
   setSingleMarker: (
@@ -46,8 +48,11 @@ const ListPlaces = (props: ListPlaceInterface) => {
       const response = await placeService.getPlace(place);
       const fetchPlace: Place = response.data;
       const coordinates = fetchPlace.coordinates;
-      const latLngWithNote: LatLngWithNote = new LatLng(coordinates!.lat, coordinates!.lng);
-      latLngWithNote.note = place.name
+      const latLngWithNote: LatLngWithNote = new LatLng(
+        coordinates!.lat,
+        coordinates!.lng
+      );
+      latLngWithNote.note = place.name;
       resetMapCallback();
       setSingleMarker(latLngWithNote, false);
     } catch (e) {
@@ -60,8 +65,16 @@ const ListPlaces = (props: ListPlaceInterface) => {
       await placeService.deletePlace(place);
       message.success("Your place has been removed!");
       fetchInit();
-    } catch (e) {
-      console.log(e);
+    } catch (err) {
+      console.log(err);
+      if (isAxiosError(err) && err.response) {
+        const { error } = err.response.data;
+        if (error.code === ExitCode.CONFLICT) {
+          message.info("The place are related to other data");
+          return;
+        }
+      }
+      console.log(err);
       message.error("There was some problem!");
     }
   };
