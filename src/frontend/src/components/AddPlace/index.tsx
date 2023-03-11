@@ -24,6 +24,9 @@ const AddPlace = (props: AddPlaceProps) => {
   const listMarker = props.listMarker;
 
   const searchPlace = async (value: string) => {
+    if (value.length < 1) {
+      return;
+    }
     try {
       setSearching(true);
       const response = await mapService.searchGeoText(value);

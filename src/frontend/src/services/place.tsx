@@ -1,21 +1,26 @@
+import { Place } from "react-app-env";
 import api from "utils/axios";
 
 const placeService = {
   async addPlace(place: Place) {
-    return api.post("/places", place);
+    const response = await api.post("/places", place);
+    return response.data;
   },
 
   async getPlaces() {
-    return api.get("/places");
+    const response = await api.get("/places");
+    return response.data;
   },
-  
+
   async getPlace(place: Place) {
-    return api.get(`/places/${place.id}`);
+    const response = await api.get(`/places/${place.id}`);
+    return response.data;
   },
 
   async deletePlace(place: Place) {
     const { id } = place;
-    return api.delete(`/places/${id}`);
+    const response = await api.delete(`/places/${id}`);
+    return response.data;
   },
 };
 

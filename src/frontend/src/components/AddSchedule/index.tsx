@@ -5,6 +5,7 @@ import { Button, Divider, Input, List, message, Modal, Skeleton } from "antd";
 import TextArea from "antd/es/input/TextArea";
 import { LatLng } from "leaflet";
 import { useEffect, useState } from "react";
+import { Place, PlaceNote, Schedule } from "react-app-env";
 import InfiniteScroll from "react-infinite-scroll-component";
 import { useNavigate } from "react-router-dom";
 import placeService from "services/place";
