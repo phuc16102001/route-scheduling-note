@@ -23,6 +23,18 @@ ors.api_key=<YOUR_ORS_API_KEY>
 
 Where the `<YOUR_ORS_API_KEY>` can get from the [Open Route Service](https://openrouteservice.org/). This will help the backend use the map APIs. Then, you can start your backend server with [IntelliJ](https://www.jetbrains.com/idea/), or manually by [Maven script](src/backend/mvnw).
 
+Install dependencies from [pom.xml](src/backend/pom.xml):
+
+```bash
+./mvnw dependency:resolve 
+```
+
+Start the application:
+
+```bash
+./mvnw spring-boot:run
+```
+
 ### Frontend web
 
 Afterward, you need to install all the required libraries in [NodeJS package](src/frontend/package.json) by typing:
