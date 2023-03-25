@@ -77,6 +77,6 @@ public class AuthServiceImpl implements AuthService {
         roles.add(userRole);
         encodedUser.setRoles(roles);
 
-        userRepository.save(user);
+        userRepository.save(encodedUser);
     }
 }

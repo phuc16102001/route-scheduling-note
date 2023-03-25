@@ -1,6 +1,9 @@
 package com.phuc.routeschedulingnote.security;
 
-import io.jsonwebtoken.*;
+import io.jsonwebtoken.ExpiredJwtException;
+import io.jsonwebtoken.Jwts;
+import io.jsonwebtoken.MalformedJwtException;
+import io.jsonwebtoken.UnsupportedJwtException;
 import io.jsonwebtoken.security.Keys;
 import io.jsonwebtoken.security.SignatureException;
 import org.springframework.beans.factory.annotation.Value;
@@ -31,7 +34,7 @@ public class JwtUtils {
                 .setSubject((userPrincipal.getUsername()))
                 .setIssuedAt(current)
                 .setExpiration(expiration)
-                .signWith(secretKey, SignatureAlgorithm.HS256)
+                .signWith(secretKey)
                 .compact();
     }
 
