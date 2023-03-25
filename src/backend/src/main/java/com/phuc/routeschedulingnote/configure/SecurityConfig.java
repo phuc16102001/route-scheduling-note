@@ -61,7 +61,7 @@ public class SecurityConfig {
                 .requestMatchers("/login", "/signup").permitAll()
                 .requestMatchers("/admin").hasRole("ADMIN")
                 .anyRequest().authenticated()
-            ).httpBasic();
+            );
 
         // Set provider to authenticate from UsernamePasswordAuthenticateToken.class
         DaoAuthenticationProvider provider = authenticationProvider();
