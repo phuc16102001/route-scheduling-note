@@ -63,7 +63,7 @@ public class AuthServiceImpl implements AuthService {
         if (userRepository.existsByUsername(username)){
             ErrorType existedUser = new ErrorType(
                     HttpStatus.CONFLICT,
-                    ExitCode.E404,
+                    ExitCode.E2000,
                     "Existed user with username = " + username);
             throw new CoreApiException(existedUser);
         }

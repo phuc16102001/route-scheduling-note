@@ -39,12 +39,12 @@ public class JwtUtils {
     }
 
     public String getUsernameFromJwt(String token) {
-        SecretKey secretKeys = Keys.hmacShaKeyFor(jwtSecret.getBytes());
+        SecretKey secretKey = Keys.hmacShaKeyFor(jwtSecret.getBytes());
 
         return Jwts.parserBuilder()
-                .setSigningKey(secretKeys)
+                .setSigningKey(secretKey)
                 .build()
-                .parseClaimsJwt(token)
+                .parseClaimsJws(token)
                 .getBody()
                 .getSubject();
     }
@@ -56,7 +56,7 @@ public class JwtUtils {
             Jwts.parserBuilder()
                     .setSigningKey(secretKey)
                     .build()
-                    .parseClaimsJwt(token);
+                    .parseClaimsJws(token);
             return true;
         } catch (SignatureException e) {
             System.out.println("Invalid signature: " + e.getMessage());
