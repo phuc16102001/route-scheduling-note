@@ -2,6 +2,7 @@
 
 <span>
     <img src="https://img.shields.io/badge/Spring-6DB33F?style=for-the-badge&logo=spring&logoColor=white">
+    <img src="https://img.shields.io/badge/Spring_Security-6DB33F?style=for-the-badge&logo=Spring-Security&logoColor=white">
     <img src="https://img.shields.io/badge/Hibernate-59666C?style=for-the-badge&logo=Hibernate&logoColor=white">
     <img src="https://img.shields.io/badge/React-20232A?style=for-the-badge&logo=react&logoColor=61DAFB">
     <img src="https://img.shields.io/badge/PostgreSQL-316192?style=for-the-badge&logo=postgresql&logoColor=white">
@@ -19,14 +20,18 @@ Firstly, you need to add a small piece of configuration before starting the back
 
 ```
 ors.api_key=<YOUR_ORS_API_KEY>
+app.jwt_secret=<JWT_SECRET_KEY>
+app.jwt_expiration_ms=<JWT_EXPIRATION_MS>
 ```
 
-Where the `<YOUR_ORS_API_KEY>` can get from the [Open Route Service](https://openrouteservice.org/). This will help the backend use the map APIs. Then, you can start your backend server with [IntelliJ](https://www.jetbrains.com/idea/), or manually by [Maven script](src/backend/mvnw).
+Where the `<YOUR_ORS_API_KEY>` can get from the [Open Route Service](https://openrouteservice.org/), this will help the backend use the map APIs. Moreover, because the applicaton use [JWT token](https://jwt.io/) for Bearer authentication, you need to add secret key and expiration time, please note that `<JWT_SECRET_KEY>` must have length at least 32 characters (256 bits).
+
+Then, you can start your backend server with [IntelliJ](https://www.jetbrains.com/idea/), or manually by [Maven script](src/backend/mvnw).
 
 Install dependencies from [pom.xml](src/backend/pom.xml):
 
 ```bash
-./mvnw dependency:resolve 
+./mvnw dependency:resolve
 ```
 
 Start the application:
@@ -62,7 +67,7 @@ Enjoy the application!
 
 ## Contribution
 
-This is a side-project which has been done by [phuc16102001]() to learn [Java Spring](https://spring.io/). 
+This is a side-project which has been done by [phuc16102001]() to learn [Java Spring](https://spring.io/).
 
 You are available to use it as a reference.
 
