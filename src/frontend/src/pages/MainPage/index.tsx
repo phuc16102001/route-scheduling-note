@@ -1,4 +1,4 @@
-import { BrowserRouter, Route, Routes } from "react-router-dom";
+import { BrowserRouter, Route, Routes, useNavigate } from "react-router-dom";
 import CustomMap from "components/CustomMap";
 import ListPlaces from "components/ListPlaces";
 import ListSchedules from "components/ListSchedules";
@@ -6,15 +6,42 @@ import MenuPage from "pages/MenuPage";
 import AddPlace from "components/AddPlace";
 import "./index.css";
 import AddSchedule from "components/AddSchedule";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { LatLng } from "leaflet";
 import { MapContainer } from "react-leaflet";
 import { LatLngWithNote } from "react-app-env";
+import userService from "services/user";
+import storageUtil from "utils/storage";
 
 const MainPage = () => {
   const [listMarker, setListMarker] = useState<LatLng[] | LatLngWithNote[]>([]);
   const [listLinePoint, setListLinePoint] = useState<LatLng[]>([]);
   const [draggable, setDraggable] = useState<boolean>(true);
+
+
+  const navigate = useNavigate();
+
+  const fetchUserFromToken = async () => {
+    try {
+      const response = await userService.getUserInformation();
+      const { data } = response;
+      storageUtil.saveUser(data);
+    } catch (err) {
+      console.log(err)
+      storageUtil.removeToken();
+      storageUtil.removeUser();
+      navigate("/login");
+    }
+  };
+
+  useEffect(() => {
+    const token: string | null = storageUtil.loadToken();
+    if (token == null) {
+      navigate("/login");
+    } else {
+      fetchUserFromToken();
+    }
+  }, []);
 
   const setSingleMarkerCallback = (
     marker: LatLng | LatLngWithNote,

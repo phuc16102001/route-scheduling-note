@@ -1,25 +1,53 @@
 import { Button, Col, Form, Input, Row } from "antd";
 import Card from "antd/es/card/Card";
-import React from "react";
-import { Link } from "react-router-dom";
+import { useEffect } from "react";
+import { User } from "react-app-env";
+import { Link, useNavigate } from "react-router-dom";
+import authService from "services/auth";
+import storageUtil from "utils/storage";
+import "./index.css";
 
 const LoginPage = () => {
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    if (storageUtil.loadToken()) {
+      navigate("/");
+    }
+  }, []);
+
+  const onSubmitLogin = async (value: User) => {
+    try {
+      const response = await authService.login(value.username, value.password!);
+      const { data } = response;
+      storageUtil.saveToken(data.token);
+      storageUtil.saveUser(data.user);
+      navigate("/");
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
   return (
     <Row style={{ height: "100%" }} justify="space-around" align="middle">
-      <Col span={5}>
-        <Card
-          title="Route note scheduling"
-          type="inner"
-          style={{ boxShadow: "2px 5px 5px 0px #828282" }}
-        >
+      <Col xs={{ span: 18 }} sm={{ span: 14 }} lg={{ span: 8 }}>
+        <Card title="Route note scheduling" type="inner" className="loginCard">
           <Row justify="space-around">
             <h3>Login form</h3>
           </Row>
-          <Form>
-            <Form.Item name="username" label="Username">
+          <Form onFinish={onSubmitLogin}>
+            <Form.Item
+              rules={[{ required: true }]}
+              name="username"
+              label="Username"
+            >
               <Input />
             </Form.Item>
-            <Form.Item name="password" label="Password">
+            <Form.Item
+              rules={[{ required: true }]}
+              name="password"
+              label="Password"
+            >
               <Input.Password />
             </Form.Item>
             <div style={{ margin: 5 }}>

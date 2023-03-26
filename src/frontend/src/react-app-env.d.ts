@@ -34,3 +34,10 @@ interface Schedule {
 interface LatLngWithNote extends LatLng {
   note?: string;
 }
+
+interface User {
+  id?: number;
+  username: string;
+  password?: string;
+  roles?: string[];
+}

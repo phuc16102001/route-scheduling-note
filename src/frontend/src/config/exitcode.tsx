@@ -1,6 +1,7 @@
 enum ExitCode {
-    NOT_FOUND = "E400",
-    CONFLICT = "E1000"
+    NOT_FOUND = "E404",
+    CONFLICT_PLACE_SCHEDULE = "E1000",
+    EXIST_USERNAME = "E2000"
 }
 
 export default ExitCode;

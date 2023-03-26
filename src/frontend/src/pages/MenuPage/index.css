@@ -12,3 +12,7 @@
   width: auto;
   margin-top: 5px;
 }
+
+.logoutIcon:hover {
+  cursor: pointer;
+}

@@ -69,7 +69,7 @@ const ListPlaces = (props: ListPlaceInterface) => {
       console.log(err);
       if (isAxiosError(err) && err.response) {
         const { error } = err.response.data;
-        if (error.code === ExitCode.CONFLICT) {
+        if (error.code === ExitCode.CONFLICT_PLACE_SCHEDULE) {
           message.info("The place are related to other data");
           return;
         }
