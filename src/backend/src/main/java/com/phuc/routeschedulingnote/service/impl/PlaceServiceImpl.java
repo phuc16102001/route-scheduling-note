@@ -60,7 +60,6 @@ public class PlaceServiceImpl implements PlaceService {
     }
 
     @Override
-    @PostAuthorize("returnObject.user.id == authentication.principal.id")
     public void deleteById(Integer id) {
         ErrorType notFound = new ErrorType(
                 HttpStatus.NOT_FOUND,
