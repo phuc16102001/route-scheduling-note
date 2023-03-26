@@ -2,7 +2,6 @@ package com.phuc.routeschedulingnote.dto;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.phuc.routeschedulingnote.dto.place.PlaceGetDto;
-import com.phuc.routeschedulingnote.model.Place;
 import lombok.Data;
 
 @Data
