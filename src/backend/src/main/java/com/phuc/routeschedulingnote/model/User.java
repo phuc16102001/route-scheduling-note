@@ -19,13 +19,15 @@ public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
-
-    @Column(name = "username")
     private String username;
-
-    @Column(name = "password")
     private String password;
 
     @ManyToMany
     private Set<Role> roles = new HashSet<>();
+
+    @OneToMany(mappedBy = "user")
+    private Set<Place> places;
+
+    @OneToMany(mappedBy = "user")
+    private Set<Schedule> schedules;
 }

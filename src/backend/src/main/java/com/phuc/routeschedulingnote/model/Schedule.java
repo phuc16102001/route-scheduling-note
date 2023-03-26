@@ -37,4 +37,6 @@ public class Schedule {
     @Cascade(value = {org.hibernate.annotations.CascadeType.DELETE})
     private List<Stop> stops;
 
+    @ManyToOne
+    private User user;
 }

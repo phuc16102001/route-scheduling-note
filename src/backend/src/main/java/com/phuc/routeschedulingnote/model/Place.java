@@ -25,4 +25,7 @@ public class Place {
     @OneToMany(mappedBy = "place")
     private List<PlaceNote> placeNotes;
 
+    @ManyToOne
+    private User user;
+
 }
