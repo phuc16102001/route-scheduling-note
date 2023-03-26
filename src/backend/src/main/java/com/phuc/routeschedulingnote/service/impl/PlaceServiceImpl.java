@@ -6,16 +6,15 @@ import com.phuc.routeschedulingnote.model.PlaceNote;
 import com.phuc.routeschedulingnote.model.User;
 import com.phuc.routeschedulingnote.repository.PlaceRepository;
 import com.phuc.routeschedulingnote.repository.UserRepository;
-import com.phuc.routeschedulingnote.security.UserDetailsImpl;
 import com.phuc.routeschedulingnote.service.PlaceService;
+import com.phuc.routeschedulingnote.service.UserService;
 import com.phuc.routeschedulingnote.support.error.ErrorType;
 import com.phuc.routeschedulingnote.support.error.ExitCode;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.access.prepost.PostAuthorize;
 import org.springframework.security.access.prepost.PostFilter;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -29,15 +28,12 @@ public class PlaceServiceImpl implements PlaceService {
     @Autowired
     UserRepository userRepository;
 
+    @Autowired
+    UserService userService;
+
     @Override
     public Place newPlace(Place place) {
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        UserDetailsImpl userDetails = (UserDetailsImpl) authentication.getPrincipal();
-
-        ErrorType errorType = new ErrorType(HttpStatus.NOT_FOUND, ExitCode.E2001, "Username not found");
-        User user = userRepository.findByUsername(userDetails.getUsername())
-                .orElseThrow(() -> new CoreApiException(errorType));
-
+        User user = userService.getUser();
         place.setUser(user);
         return placeRepository.save(place);
     }
@@ -61,12 +57,12 @@ public class PlaceServiceImpl implements PlaceService {
 
     @Override
     public void deleteById(Integer id) {
-        ErrorType notFound = new ErrorType(
-                HttpStatus.NOT_FOUND,
-                ExitCode.E404,
-                "Place not found with id = " + id);
-        Place place = placeRepository.findById(id)
-                .orElseThrow(() -> new CoreApiException(notFound));
+        Place place = this.onePlace(id);
+        User user = userService.getUser();
+        if (place.getUser() != user) {
+            throw new AccessDeniedException("Access denied");
+        }
+
         List<PlaceNote> placeNotes = place.getPlaceNotes();
         if (placeNotes.size()>0) {
             ErrorType involveException = new ErrorType(

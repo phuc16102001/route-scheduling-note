@@ -9,18 +9,17 @@ import com.phuc.routeschedulingnote.repository.PlaceNoteRepository;
 import com.phuc.routeschedulingnote.repository.ScheduleRepository;
 import com.phuc.routeschedulingnote.repository.StopRepository;
 import com.phuc.routeschedulingnote.repository.UserRepository;
-import com.phuc.routeschedulingnote.security.UserDetailsImpl;
 import com.phuc.routeschedulingnote.service.MapService;
 import com.phuc.routeschedulingnote.service.ScheduleService;
+import com.phuc.routeschedulingnote.service.UserService;
 import com.phuc.routeschedulingnote.support.error.ErrorType;
 import com.phuc.routeschedulingnote.support.error.ExitCode;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.access.prepost.PostAuthorize;
 import org.springframework.security.access.prepost.PostFilter;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -46,6 +45,9 @@ public class ScheduleServiceImpl implements ScheduleService {
     @Autowired
     MapService mapService;
 
+    @Autowired
+    UserService userService;
+
     @Override
     @Transactional
     public Schedule addSchedule(Schedule schedule) {
@@ -55,12 +57,7 @@ public class ScheduleServiceImpl implements ScheduleService {
         List<Coordinates> routeCoordinates = mapService.routeDirection(coordinatesList);
 
         // User
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        UserDetailsImpl userDetails = (UserDetailsImpl) authentication.getPrincipal();
-
-        ErrorType errorType = new ErrorType(HttpStatus.NOT_FOUND, ExitCode.E2001, "Username not found");
-        User user = userRepository.findByUsername(userDetails.getUsername())
-                .orElseThrow(() -> new CoreApiException(errorType));
+        User user = userService.getUser();
 
         // Schedule
         Schedule inserted = scheduleRepository.save(schedule);
@@ -106,6 +103,11 @@ public class ScheduleServiceImpl implements ScheduleService {
 
     @Override
     public void deleteById(Integer id) {
+        Schedule schedule = this.getById(id);
+        User user = userService.getUser();
+        if (schedule.getUser() != user) {
+            throw new AccessDeniedException("Access denied");
+        }
         scheduleRepository.deleteById(id);
     }
 }
