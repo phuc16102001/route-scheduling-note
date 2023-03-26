@@ -20,7 +20,7 @@ const MainPage = () => {
     marker: LatLng | LatLngWithNote,
     draggable: boolean = true
   ) => {
-    const listMarker: LatLng[] | LatLngWithNote[] = [marker]
+    const listMarker: LatLng[] | LatLngWithNote[] = [marker];
     setListMarker(listMarker);
     setDraggable(draggable);
   };
@@ -41,51 +41,49 @@ const MainPage = () => {
 
   return (
     <>
-      <BrowserRouter>
-        <div className="floatPanel">
-          <Routes>
-            <Route path="/" element={<MenuPage />} />
-            <Route
-              path="/schedules"
-              element={
-                <ListSchedules
-                  setListLinePointCallback={setListLinePointCallback}
-                  setListMarkerCallback={setListMarkerCallback}
-                  resetMapCallback={resetMapCallback}
-                />
-              }
-            />
-            <Route
-              path="/places"
-              element={
-                <ListPlaces
-                  setSingleMarker={setSingleMarkerCallback}
-                  resetMapCallback={resetMapCallback}
-                />
-              }
-            />
-            <Route
-              path="/addSchedule"
-              element={
-                <AddSchedule
-                  setListMarkerCallback={setListMarkerCallback}
-                  resetMapCallback={resetMapCallback}
-                />
-              }
-            />
-            <Route
-              path="/addPlace"
-              element={
-                <AddPlace
-                  listMarker={listMarker}
-                  setSingleMarkerCallback={setSingleMarkerCallback}
-                  resetMapCallback={resetMapCallback}
-                />
-              }
-            />
-          </Routes>
-        </div>
-      </BrowserRouter>
+      <div className="floatPanel">
+        <Routes>
+          <Route path="/" element={<MenuPage />} />
+          <Route
+            path="/schedules"
+            element={
+              <ListSchedules
+                setListLinePointCallback={setListLinePointCallback}
+                setListMarkerCallback={setListMarkerCallback}
+                resetMapCallback={resetMapCallback}
+              />
+            }
+          />
+          <Route
+            path="/places"
+            element={
+              <ListPlaces
+                setSingleMarker={setSingleMarkerCallback}
+                resetMapCallback={resetMapCallback}
+              />
+            }
+          />
+          <Route
+            path="/addSchedule"
+            element={
+              <AddSchedule
+                setListMarkerCallback={setListMarkerCallback}
+                resetMapCallback={resetMapCallback}
+              />
+            }
+          />
+          <Route
+            path="/addPlace"
+            element={
+              <AddPlace
+                listMarker={listMarker}
+                setSingleMarkerCallback={setSingleMarkerCallback}
+                resetMapCallback={resetMapCallback}
+              />
+            }
+          />
+        </Routes>
+      </div>
 
       <MapContainer
         className="mapContainer"
